@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs.shop.manage.mapper.CarInfoMapper">
+    <resultMap id="carInfo" type="com.cs.shop.bean.CarInfo">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="brandName" jdbcType="VARCHAR" property="brand_name"/>
+        <result column="seriesName" jdbcType="VARCHAR" property="series_name"/>
+        <result column="userName" jdbcType="VARCHAR" property="user_name"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="defaultImg" jdbcType="VARCHAR" property="default_img"/>
+        <result column="carDesc" jdbcType="VARCHAR" property="car_desc"/>
+        <result column="buyTime" jdbcType="VARCHAR" property="buy_time"/>
+        <result column="createTime" jdbcType="VARCHAR" property="create_time"/>
+        <result column="saleState" jdbcType="INTEGER" property="sale_state"/>
+    </resultMap>
+
+    <select id="selectCarInfoList" parameterType="java.util.Map" resultMap="carInfo">
+        select a.name as brand_name,
+			 b.name as series_name,
+			 d.name as user_name,
+			 c.id as id,
+			 c.price as price,
+			 c.default_img as default_img,
+			 c.car_desc as car_desc,
+			 c.buy_time as buy_time,
+			 c.create_time as create_time,
+			 c.sale_state as sale_state
+        from  car_brand a,
+			  car_series b,
+			  car_info c,
+		      car_owner d
+        where a.id=b.brand_id and b.id=c.series_id  and d.id=c.user_id and b.id=${seriesId} and c.is_show=1
+    </select>
+
+    <select id="selectMaxId" resultMap="carInfo">
+        select max(id) as id from car_info
+    </select>
+
+    <insert id="inserCarInfo" parameterType="java.util.Map">
+        INSERT INTO car_info(brand_id,series_id,user_id,price,car_desc,buy_time,create_time,type,mileage,displacement,seat_num,discharge_standard,oil_type,color,area,drive_type,country)
+        VALUES (#{brandId},#{seriesId},#{userId},#{price},#{caDesc},#{buyTime},#{createTime},#{type},#{mileage},#{displacement},#{seatNum},#{dischargeStandard},#{oilType},#{color},#{area},#{driveType},#{country})
+    </insert>
+
+    <update id="upDateCarInfo" parameterType="java.util.Map" >
+        update car_info set car_desc=#{carDesc},sale_state=#{saleState} where id=#{id}
+    </update>
+
+    <delete id="deleteCarInfo" parameterType="java.util.Map" >
+        update car_info set is_show=0 where id=#{id}
+    </delete>
+
+</mapper>
