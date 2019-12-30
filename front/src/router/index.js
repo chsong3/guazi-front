@@ -20,6 +20,11 @@ export default new Router({
             meta: { title: '登录' }
         },
         {
+            path: '/buyCar',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/BuyCar.vue'),
+            meta: { title: '我要买车' },
+        },
+        {
             path: '*',
             redirect: '/404'
         }
