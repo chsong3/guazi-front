@@ -25,6 +25,11 @@ export default new Router({
             meta: { title: '我要买车' },
         },
         {
+            path: '/test',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
+            meta: { title: '我要买车5d55' },
+        },
+        {
             path: '*',
             redirect: '/404'
         }
