@@ -25,9 +25,9 @@ export default new Router({
             meta: { title: '我要买车' },
         },
         {
-            path:'/carDetail',
-            component: () => import(/* webpackChunkName: "index" */ '../components/page/CarInfo.vue'),
-            meta: { title: '车辆详情' },
+            path: '/test',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
+            meta: { title: '我要买车5d55' },
         },
         {
             path: '*',
