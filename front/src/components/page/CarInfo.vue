@@ -1,8 +1,12 @@
 <template>
     <div>
+        <div>
     <Header></Header>
-        <div class="block">
-            <span class="demonstration">默认 Hover 指示器触发</span>
+        </div>
+        <div>
+
+        <!--大图展示-->
+        <div class="block" style="margin-top: 20px;">
             <el-carousel height="500px" style="width:700px;margin-left: 10%" indicator-position="none">
                 <el-carousel-item v-for="item in imgList" :key="item">
                     <h3 class="small">
@@ -10,7 +14,56 @@
                 </el-carousel-item>
             </el-carousel>
         </div>
-    <div>
+
+            <!--车辆信息-->
+                    <div style="float:left;margin-top: -500px;margin-left: 900px;">
+                        <div>
+                        <h2 style="font-weight: normal">奔驰C级 2016款 C 200 轿跑版(进口)</h2>
+                        </div>
+
+                        <div style="float:left">
+                            <div>
+                        <p style="margin-top: 30px;margin-left: 15px;font-size: 18px;">2016-05</p>
+                        <span style="margin-left: 25px;font-size: 13px;color: #777777;">上牌时间</span>
+                            </div>
+               <div style="height:30px;border-right:1px #777777 solid;width:100px;float:left;margin-top: -35px"></div>
+                        </div>
+
+                        <div style="float:left;">
+                            <div>
+                                <p style="margin-top: 30px;margin-left: 15px;font-size: 18px;">3.09万公里</p>
+                                <span style="margin-left: 25px;font-size: 13px;color: #777777;">表显里程</span>
+                            </div>
+                            <div style="height:30px;border-right:1px #777777 solid;width:100px;float:left;margin-top: -35px;margin-left: 15px"></div>
+                        </div>
+
+                        <div style="float:left">
+                            <div>
+                                <p style="margin-top: 30px;margin-left: 15px;font-size: 18px;">2.0T</p>
+                                <span style="margin-left: 20px;font-size: 13px;color: #777777;">排量</span>
+                            </div>
+                            <div style="height:30px;border-right:1px #777777 solid;width:100px;float:left;margin-top: -35px;margin-left: -30px"></div>
+                        </div>
+
+                        <div style="float:left">
+                            <div>
+                                <p style="margin-top: 30px;margin-left: 25px;font-size: 18px;">自动</p>
+                                <span style="margin-left: 25px;font-size: 13px;color: #777777;">变速箱</span>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+        <!--小图展示-->
+        <div style="width:450px;height:100px;overflow:hidden;margin-left: 300px;margin-top: 20px;" id="smallImg">
+            <img v-for="item in imgList" :key="item" :src=item style="width:100px;height:100px;margin-left: 10px;">
+        </div>
+        </div>
+
+
+    <div style="float:bottom">
         <Footer></Footer>
     </div>
     </div>
@@ -41,6 +94,11 @@ export default {
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg',
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg',
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg']
+        }
+    },
+    methods:{
+        handleAdd(){
+
         }
     }
 }
