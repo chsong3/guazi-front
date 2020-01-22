@@ -39,6 +39,7 @@ export default {
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg',
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg',
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg',
+              'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg',
               'http://106.54.28.115/group1/M00/00/00/rBEACF3x6gKAALfPAADkv6X0STU802.jpg']
         }
     }
