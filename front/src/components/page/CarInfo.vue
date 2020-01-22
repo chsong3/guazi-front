@@ -57,8 +57,8 @@
                     </div>
 
         <!--小图展示-->
-        <div style="width:450px;height:100px;overflow:hidden;margin-left: 300px;margin-top: 20px;" id="smallImg">
-            <img v-for="item in imgList" :key="item" :src=item style="width:100px;height:100px;margin-left: 10px;">
+        <div style="width:700px;height:100px;overflow:hidden;margin-left: 205px;margin-top: 20px;" id="smallImg">
+            <img v-for="item in imgList" :key="item" :src=item style="width:150px;height:100px;margin-left: 10px;">
         </div>
         </div>
 
