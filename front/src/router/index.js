@@ -30,6 +30,11 @@ export default new Router({
             meta: { title: '我要买车5d55' },
         },
         {
+            path: '/carDetail',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/CarInfo.vue'),
+            meta: { title: '车辆详情' },
+        },
+        {
             path: '*',
             redirect: '/404'
         }
