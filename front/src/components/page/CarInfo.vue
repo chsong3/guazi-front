@@ -7,7 +7,7 @@
 
         <!--大图展示-->
         <div class="block" style="margin-top: 20px;">
-            <el-carousel height="500px" style="width:700px;margin-left: 10%" indicator-position="none">
+            <el-carousel height="500px" style="width:700px;margin-left: 9%" indicator-position="none">
                 <el-carousel-item v-for="item in imgList" :key="item">
                     <h3 class="small">
                         <img class="card-image" style="height:500px;width: 700px" :src=item></h3>
@@ -16,7 +16,7 @@
         </div>
 
             <!--车辆信息-->
-                    <div style="float:left;margin-top: -500px;margin-left: 900px;">
+                    <div style="float:left;margin-top: -500px;margin-left: 900px;border:1px red solid">
                         <div>
                         <h2 style="font-weight: normal">奔驰C级 2016款 C 200 轿跑版(进口)</h2>
                         </div>
@@ -52,7 +52,16 @@
                             </div>
                         </div>
 
+                     <!--价格展示-->
+                      <div style="margin-top: 100px;margin-left: 20px;">
+                          <p style="font-size: 14px;color: darkorange">金融专享价:</p>
+                          <h2 style="margin-top: -25px;margin-left: 80px;color: orangered">￥6.05万</h2>
+                      </div>
 
+                     <!--APP下载-->
+                      <div style="margin-top: -7%;margin-left: 55%">
+                       <a href="" style="color: black;text-decoration: none">更低价格下载APP</a>
+                      </div>
 
                     </div>
 
