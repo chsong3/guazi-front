@@ -30,6 +30,11 @@ export default new Router({
             meta: { title: '车辆详情' },
         },
         {
+            path: '/test',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
+            meta: { title: '测试' },
+        },
+        {
             path: '*',
             redirect: '/404'
         }

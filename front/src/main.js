@@ -11,6 +11,19 @@ Vue.use(ElementUI, {
     size: 'small'
 });
 
+router.beforeEach((to, from, next) => {
+    if(to.path === '/login') {
+        next();
+    } else {
+        let token = localStorage.getItem('token');
+        if(token === null || token === '') {
+            next();
+        }else {
+            next();
+        }
+    }
+});
+
 new Vue({
     router,
     render: h => h(App)

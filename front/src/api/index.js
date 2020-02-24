@@ -2,6 +2,8 @@
 import request from '@/utils/request'
 
 const requestCarInfo = request.requestCarInfo;
+const requestPassport = request.requestPassport;
+const requestLogin = request.requestPassport;
 
 export default {
 
@@ -29,6 +31,20 @@ export default {
         })
     },
 
+    //发送验证码
+    sendCode(phoneNum){
+        return requestPassport({
+            url:"sendCode?phoneNum="+phoneNum,
+            method:'post'
+        })
+    },
+    login(loginForm){
+        return requestPassport({
+            url:"fontSysLogin",
+            method:'post',
+            data:loginForm
+        })
+    }
 }
 Date.prototype.format = function (fmt) { //author: meizz
     let o = {

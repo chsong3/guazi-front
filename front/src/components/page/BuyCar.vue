@@ -14,9 +14,11 @@
                         </div>
                     </el-col>
                     <el-col :span="8">
-                        <el-input placeholder="请输入内容">
-                            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                        </el-input>
+                        <el-autocomplete v-model="searchInput" placeholder="请输入内容"
+                                         :fetch-suggestions="querySearchAsync" suffix-icon="el-input__icon el-icon-search"
+                                         @select="searchSelect"
+                        >
+                        </el-autocomplete>
                     </el-col>
                 </el-row>
                 <!--条件筛选部分-->
@@ -444,16 +446,16 @@
                                         :class="{greenFont:selectedSort.default}"
                                         class="list-head-font2 item-pointer">默认排序</span></div>
                                 <div :class="{greenFont:selectedSort.bestNew}"
-                                        class="border" @click="getCarInfoBySort('createTime')"><span
+                                     class="border" @click="getCarInfoBySort('createTime')"><span
                                         class="list-head-font2 item-pointer">最新发布</span></div>
                                 <div :class="{greenFont:selectedSort.price}"
-                                        class="border" @click="getCarInfoBySort('price')">
+                                     class="border" @click="getCarInfoBySort('price')">
                                     <span class="list-head-font2 item-pointer">价格</span>
                                     <i v-show="sort.sortByPrice" class="el-icon-caret-top"></i>
                                     <i v-show="!sort.sortByPrice" class="el-icon-caret-bottom"></i>
                                 </div>
                                 <div :class="{greenFont:selectedSort.mileage}"
-                                        class="border" @click="getCarInfoBySort('mileage')">
+                                     class="border" @click="getCarInfoBySort('mileage')">
                                     <span class="list-head-font2 item-pointer">里程</span>
                                     <i v-show="sort.sortByMileage" class="el-icon-caret-top"></i>
                                     <i v-show="!sort.sortByMileage" class="el-icon-caret-bottom"></i>
@@ -477,7 +479,7 @@
                                 <img class="card-image"
                                      :src="car.defaultImg">
                                 <div>
-                                    <h2 class="car-dec">{{car.brandName}}{{car.seriesName}}{{car.carDesc}}</h2>
+                                    <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
                                     <div class="car-time">
                                         {{car.buyTime}}
                                         <span>|</span>
@@ -527,6 +529,7 @@
     export default {
         data() {
             return {
+                searchInput: '',
                 FristPin: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z'],
                 brandJson: [],
                 seriesJson: [],
@@ -561,15 +564,15 @@
                         },
                         { id: 7, name: '16-20万', active: false }, { id: 8, name: '20万以上', active: false }]//价格选项
                 },
-                sort:{
-                    sortByPrice:true,//按照价格排序
-                    sortByMileage:true,//按照里程排序
+                sort: {
+                    sortByPrice: true,//按照价格排序
+                    sortByMileage: true//按照里程排序
                 },
-                selectedSort:{
-                    default:true,
-                    bestNew:false,
-                    price:false,
-                    mileage:false
+                selectedSort: {
+                    default: true,
+                    bestNew: false,
+                    price: false,
+                    mileage: false
                 },
                 input: '',
                 show: {
@@ -607,7 +610,7 @@
                     country: '',//国别
                     otherDeploy: '',//其他亮点配置',
                     pageIndex: 1,
-                    pageSize: 10,
+                    pageSize: 10
                 },
                 carTypeOption: [{ id: '0', name: '不限' },
                     { id: '2', name: '两厢轿车' }, { id: '3', name: '三厢轿车' }, { id: '4', name: '跑车' },
@@ -681,19 +684,19 @@
             },
             getCarInfoBySort(name) {
                 if (name == 'default') {
-                    let selected=this.selectedSort;
-                    selected.default=true;
-                    selected.bestNew=false;
-                    selected.price=false;
-                    selected.mileage=false;
-                    this.getCarInfo(this.carFrom)
+                    let selected = this.selectedSort;
+                    selected.default = true;
+                    selected.bestNew = false;
+                    selected.price = false;
+                    selected.mileage = false;
+                    this.getCarInfo(this.carFrom);
                 }
                 if (name == 'createTime') {
-                    let selected=this.selectedSort;
-                    selected.default=false;
-                    selected.bestNew=true;
-                    selected.price=false;
-                    selected.mileage=false;
+                    let selected = this.selectedSort;
+                    selected.default = false;
+                    selected.bestNew = true;
+                    selected.price = false;
+                    selected.mileage = false;
                     this.carList.sort((a, b) => {
                         var x = a.createTime;
                         var y = b.createTime;
@@ -702,20 +705,20 @@
                     //_this.createTime = 'true';//车辆在瓜子上架时间
                 }
                 if (name == 'price') {
-                    let selected=this.selectedSort;
-                    selected.default=false;
-                    selected.bestNew=false;
-                    selected.price=true;
-                    selected.mileage=false;
-                    this.sort.sortByPrice== true ? this.sort.sortByPrice=false : this.sort.sortByPrice=true
-                    if (this.sort.sortByPrice==true){//升序
+                    let selected = this.selectedSort;
+                    selected.default = false;
+                    selected.bestNew = false;
+                    selected.price = true;
+                    selected.mileage = false;
+                    this.sort.sortByPrice == true ? this.sort.sortByPrice = false : this.sort.sortByPrice = true;
+                    if (this.sort.sortByPrice == true) {//升序
                         this.carList.sort((a, b) => {
                             var x = a.price;
                             var y = b.price;
                             return ((x < y) ? -1 : (x > y) ? 1 : 0);
                         });
                     }
-                    if (this.sort.sortByPrice==false){//降序
+                    if (this.sort.sortByPrice == false) {//降序
                         this.carList.sort((a, b) => {
                             var x = a.price;
                             var y = b.price;
@@ -724,20 +727,20 @@
                     }
                 }
                 if (name == 'mileage') {
-                    let selected=this.selectedSort;
-                    selected.default=false;
-                    selected.bestNew=false;
-                    selected.price=false;
-                    selected.mileage=true;
-                    this.sort.sortByMileage== true ? this.sort.sortByMileage=false : this.sort.sortByMileage=true
-                    if (this.sort.sortByMileage==true){//升序
+                    let selected = this.selectedSort;
+                    selected.default = false;
+                    selected.bestNew = false;
+                    selected.price = false;
+                    selected.mileage = true;
+                    this.sort.sortByMileage == true ? this.sort.sortByMileage = false : this.sort.sortByMileage = true;
+                    if (this.sort.sortByMileage == true) {//升序
                         this.carList.sort((a, b) => {
                             var x = a.mileage;
                             var y = b.mileage;
                             return ((x < y) ? -1 : (x > y) ? 1 : 0);
                         });
                     }
-                    if (this.sort.sortByMileage==false){//降序
+                    if (this.sort.sortByMileage == false) {//降序
                         this.carList.sort((a, b) => {
                             var x = a.mileage;
                             var y = b.mileage;
@@ -819,6 +822,27 @@
                         brandJson.splice(index, 1);
                     }
                 });
+            },
+            querySearchAsync(queryString, cb) {
+                var results = [];
+                   results = queryString ? this.createStateFilter(queryString) : this.carList;
+                let cbResult=[];
+                for(let i=0;i<results.length;i++){
+                    cbResult.push({'value':results[i].seriesName})
+                }
+                cb(cbResult);
+            },
+            createStateFilter(queryString) {
+                return this.carList.filter((value) => {
+                    return value.seriesName == queryString;
+                });
+            },
+            searchSelect(item){
+                let seriesName=this.carList.filter((value)=>{
+                    return value.seriesName=item.value
+                })
+                this.carFrom.seriesId=seriesName[0];
+                this.getCarInfo(this.carFrom)
             },
             clickBrand(id) {
                 this.carFrom.seriesId = '';//清空条件
@@ -1075,7 +1099,7 @@
         overflow: hidden;
     }
 
-    .greenFont{
+    .greenFont {
         color: #22AC38;
         font-weight: bolder;
     }
