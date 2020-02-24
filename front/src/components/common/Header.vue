@@ -9,7 +9,10 @@
                       <el-row>
                           <el-col :span="14">
                               <div class="logo">
-
+                                  <el-image
+                                      style="width: 100px; height: 60px"
+                                      :src="headerimage">
+                                  </el-image>
                               </div>
                           </el-col>
                           <el-col :span="10">
@@ -17,7 +20,8 @@
                                   <el-cascader
                                           v-model="value"
                                           :options="options"
-                                          @change="handleChange"></el-cascader>
+                                          @change="handleChange">
+                                  </el-cascader>
                               </div>
                           </el-col>
                       </el-row>
@@ -34,10 +38,10 @@
                               background-color="#545c64"
                               text-color="#fff"
                               active-text-color="#ffd04b">
-                          <el-menu-item index="1">处理中心</el-menu-item>
-                          <el-menu-item index="2">处理中心</el-menu-item>
-                          <el-menu-item index="3">消息中心</el-menu-item>
-                          <el-menu-item index="4">订单管理</el-menu-item>
+                              <el-menu-item index="1"><router-link to="/index">首页</router-link></el-menu-item>
+                              <el-menu-item index="2"><router-link to="/sellcar">我要卖车</router-link></el-menu-item>
+                              <el-menu-item index="3"><router-link to="/buycar">我要买车</router-link></el-menu-item>
+                              <el-menu-item index="4"><router-link to="/finance">瓜子金融</router-link></el-menu-item>
                       </el-menu>
                   </div>
               </el-col>
@@ -80,7 +84,8 @@ export default {
                     label: '重庆市'
                 }],
             }
-            ]
+            ],
+            headerimage:require('../../assets/logo.png'),
         };
     },
     methods: {
@@ -136,7 +141,6 @@ export default {
     }
     .Navigation{
         width: 650px;
-
         margin-left: 130px;
     }
     .Login{
@@ -147,7 +151,7 @@ export default {
         height: 50px;
         width: 150px;
         margin-left: 50px;
-        border: 1px forestgreen solid ;
+
     }
     .region{
         height: 50px;
