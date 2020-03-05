@@ -4,12 +4,13 @@ import router from './router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/common.css'
-
-import pinyin from 'js-pinyin'
+import SlideVerify from './components/lib/index';
+import store from './store/index'
 
 Vue.use(ElementUI, {
     size: 'small'
 });
+Vue.use(SlideVerify)
 
 router.beforeEach((to, from, next) => {
     if(to.path === '/login') {
@@ -26,5 +27,6 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
+    store,
     render: h => h(App)
 }).$mount('#app');
