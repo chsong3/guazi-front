@@ -1,26 +1,28 @@
 <template>
-    <div class="login-form">
-        <el-form :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
-            <el-form-item prop="phone">
-                <el-input type="tel" size="small" @keyup.enter.native="handleLogin" v-model="loginForm.phone"
-                          auto-complete="off" placeholder="请输入手机号码">
-                    <i slot="prefix" class="icon-shouji"></i>
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="code">
-                <el-input size="small" @keyup.enter.native="handleLogin" v-model="loginForm.code" auto-complete="off"
-                          placeholder="请输入验证码">
-                    <i slot="prefix" class="icon-yanzhengma" style="margin-top:6px;"></i>
-                    <template slot="append" class="code">
-                        <span @click="handleSend" class="msg-text" :class="[{display:msgKey}]">{{msgText}}</span>
-                    </template>
-                </el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button size="small" type="primary" @click.native.prevent="handleLogin" class="login-submit">登录
-                </el-button>
-            </el-form-item>
-        </el-form>
+    <div>
+        <div class="login-form">
+            <el-form :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
+                <el-form-item prop="phone">
+                    <el-input type="tel" size="small" @keyup.enter.native="handleLogin" v-model="loginForm.phone"
+                              auto-complete="off" placeholder="请输入手机号码">
+                        <i slot="prefix" class="icon-shouji"></i>
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="code">
+                    <el-input size="small" @keyup.enter.native="handleLogin" v-model="loginForm.code" auto-complete="off"
+                              placeholder="请输入验证码">
+                        <i slot="prefix" class="icon-yanzhengma" style="margin-top:6px;"></i>
+                        <template slot="append" class="code">
+                            <span @click="sendCode" class="msg-text" :class="[{display:msgKey}]">{{msgText}}</span>
+                        </template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button size="small" type="primary" @click.native.prevent="handleLogin" class="login-submit">登录
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 </template>
 
@@ -30,6 +32,14 @@
         MSGSCUCCESS = '${time}秒后重发',
         MSGTIME = 60;
     import quest from '../../api/index';
+    import { mapMutations } from 'vuex';
+
+    import img0 from '../../assets/slider/img.jpg';
+    import img1 from '../../assets/slider/img1.jpg';
+    import img2 from '../../assets/slider/img2.jpg';
+    import img3 from '../../assets/slider/img3.jpg';
+    import img4 from '../../assets/slider/img4.jpg';
+    import img5 from '../../assets/slider/img5.jpg';
 
     export default {
         name: 'codelogin',
@@ -55,6 +65,7 @@
                 }, 100);
             };
             return {
+                centerDialogVisible: false,
                 msgText: MSGINIT,
                 msgTime: MSGTIME,
                 msgKey: false,
@@ -69,11 +80,12 @@
         },
         props: [],
         methods: {
-            handleSend() {
+            sendCode(){
                 this.$refs.loginForm.validate(valid => {
                     if (valid) {
                         quest.sendCode(this.loginForm.phone).then(response => {
-
+                            alert(response.data.message)
+                            this.$store.state.user = response.data.user
                         });
                         if (this.msgKey) return;
                         this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime);
@@ -106,17 +118,16 @@
                             } else {
                                 quest.login(this.loginForm).then(response => {
                                     if (response.data.loginReturn === 'loginSuccess') {
-                                        this.$router.push('/');
+                                        this.$router.push('/buyCar');
                                     } else if (response.data.loginReturn === 'loginFaile') {
                                         alert('验证码错误，请重试！');
-                                    }
-                                    ;
+                                    };
                                 });
                             }
                         }
                     }
                 });
-            }
+            },
         }
     };
 </script>

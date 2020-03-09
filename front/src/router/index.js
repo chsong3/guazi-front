@@ -15,11 +15,6 @@ export default new Router({
             meta: { title: '首页' },
         },
         {
-            path: '/login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
-            meta: { title: '登录' }
-        },
-        {
             path: '/buyCar',
             component: () => import(/* webpackChunkName: "index" */ '../components/page/BuyCar.vue'),
             meta: { title: '我要买车' },
