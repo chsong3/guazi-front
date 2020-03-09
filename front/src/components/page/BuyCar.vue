@@ -15,7 +15,8 @@
                     </el-col>
                     <el-col :span="8">
                         <el-autocomplete v-model="searchInput" placeholder="请输入内容"
-                                         :fetch-suggestions="querySearchAsync" suffix-icon="el-input__icon el-icon-search"
+                                         :fetch-suggestions="querySearchAsync"
+                                         suffix-icon="el-input__icon el-icon-search"
                                          @select="searchSelect"
                         >
                         </el-autocomplete>
@@ -434,11 +435,23 @@
                     <!--list头部-->
                     <el-row>
                         <el-col :span="8" class="list-head-left">
-                            <span class="list-head-font1 item-pointer">全部</span>
+                            <span class="list-head-font1 item-pointer list-head-active"
+                                  :class="{listHeadActive:listHeadActive.all}"
+                                  @click="clickAll">
+                                全部
+                            </span>
                             <em></em>
-                            <span class="list-head-font1 item-pointer">付三成</span>
+                            <span class="list-head-font1 item-pointer"
+                                  :class="{listHeadActive:listHeadActive.payThree}"
+                                  @click="clickPayThree">
+                                付三成
+                            </span>
                             <em></em>
-                            <span class="list-head-font1 item-pointer">严选车<i></i></span>
+                            <span class="list-head-font1 item-pointer"
+                                  :class="{listHeadActive:listHeadActive.selectCar}"
+                                  @click="clickSelect">
+                                严选车<i></i>
+                            </span>
                         </el-col>
                         <el-col :span="16">
                             <div class="list-head-right">
@@ -490,7 +503,8 @@
                                             {{car.price}}.00
                                             <span>万</span>
                                         </p>
-                                        <em class="line-through">169.2万</em>
+                                        <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{car.price*0.3}}万</em>
+                                        <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
                                     </div>
                                 </div>
                             </el-card>
@@ -550,6 +564,11 @@
                 ],
                 showTags: {
                     typeTags: true
+                },
+                listHeadActive: {
+                    all: true,
+                    payThree: false,
+                    selectCar: false
                 },
                 showClass: {
                     active: true,
@@ -825,10 +844,10 @@
             },
             querySearchAsync(queryString, cb) {
                 var results = [];
-                   results = queryString ? this.createStateFilter(queryString) : this.carList;
-                let cbResult=[];
-                for(let i=0;i<results.length;i++){
-                    cbResult.push({'value':results[i].seriesName})
+                results = queryString ? this.createStateFilter(queryString) : this.carList;
+                let cbResult = [];
+                for (let i = 0; i < results.length; i++) {
+                    cbResult.push({ 'value': results[i].seriesName });
                 }
                 cb(cbResult);
             },
@@ -837,12 +856,12 @@
                     return value.seriesName == queryString;
                 });
             },
-            searchSelect(item){
-                let seriesName=this.carList.filter((value)=>{
-                    return value.seriesName=item.value
-                })
-                this.carFrom.seriesId=seriesName[0];
-                this.getCarInfo(this.carFrom)
+            searchSelect(item) {
+                let seriesName = this.carList.filter((value) => {
+                    return value.seriesName = item.value;
+                });
+                this.carFrom.seriesId = seriesName[0];
+                this.getCarInfo(this.carFrom);
             },
             clickBrand(id) {
                 this.carFrom.seriesId = '';//清空条件
@@ -952,8 +971,35 @@
             // 分页导航
             handlePageChange(val) {
                 this.carFrom.pageIndex = val;
+            },
+            //全部
+            clickAll() {
+                this.getCarInfo(this.carFrom);
+                this.listHeadActive = {
+                    all: true,
+                    payThree: false,
+                    selectCar: false
+                };
+            },
+            //付三成
+            clickPayThree() {
+                this.listHeadActive = {
+                    all: false,
+                    payThree: true,
+                    selectCar: false
+                };
+                this.carList = this.carList.filter((value) => {
+                    return value.otherDeploy == '1'
+                })
+            },
+            //严选车
+            clickSelect() {
+                this.listHeadActive = {
+                    all: false,
+                    payThree: false,
+                    selectCar: true
+                };
             }
-
         }
     };
 </script>
@@ -1140,7 +1186,7 @@
         color: #495056;
     }
 
-    .list-head-font1:hover {
+    .listHeadActive {
         border-bottom: 3px solid #22ac38;
     }
 
