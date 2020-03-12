@@ -1,9 +1,6 @@
 <template>
     <div>
         <div class="body">
-            <el-header>
-                <Header></Header>
-            </el-header>
             <el-main>
                 <!--条件筛选部分-->
                 <!--搜索框-->
@@ -535,7 +532,7 @@
 
 <script>
     import Footer from '../common/Footer.vue';
-    import Header from '../common/Header.vue';
+    //import Header from '../common/Header.vue';
     import quest from '../../api/index';
     import { currentDate, currentDateStr } from '../../api/index';
     import pinyin from '../../../node_modules/js-pinyin/index';
@@ -683,7 +680,7 @@
             }
         },
         components: {
-            Header,
+            //Header,
             Footer
         },
         mounted() {
@@ -1010,31 +1007,26 @@
         list-style: none;
         text-align: -webkit-match-parent;
     }
-
     .gray-font {
         font-family: "Apple Color Emoji";
         color: #777777;
         font-size: 16px;
     }
-
     .condition {
         height: 100%;
         margin-top: 20px;
         border: 1px #DCDFE6 solid;
         border-bottom: white;
     }
-
     .condition-item {
         width: 100%;
         height: 100%;
         border-bottom: 1px #DCDFE6 solid;
     }
-
     .item-head {
         height: 49px;
         background-color: #FAFAFA;
     }
-
     .item-head-font {
         display: block;
         text-align: center;

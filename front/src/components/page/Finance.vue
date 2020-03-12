@@ -1,10 +1,9 @@
 <template>
     <div>
-        <Myheader/>
-        <el-row>
-            <el-col>
+        <div>
+            <el-main>
                 <!--头部导航-->
-                <el-row style="height: 400px;background: red">
+                <el-row>
                     <el-col>
                         <!--申请框-->
                         <el-row style="height: 300px;background: ghostwhite">
@@ -13,14 +12,20 @@
                                 <div class="shengqing_1">
                                     <h3 style="float: left">定制方案</h3>
                                     <li style="list-style: none;margin-left: 100px;margin-top: 2px">资质越好，方案越划算</li>
-                                    <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+                                    <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px"
+                                             class="demo-ruleForm">
                                         <el-form-item prop="age">
-                                            <el-input  type="age" placeholder="请输入手机号" v-model.number="numberValidateForm.phone" autocomplete="off"></el-input>
+                                            <el-input type="age" placeholder="请输入手机号"
+                                                      v-model.number="numberValidateForm.phone"
+                                                      autocomplete="off"></el-input>
                                             <el-link>获取验证码</el-link>
-                                            <el-input type="age" placeholder="验证码"  v-model.number="numberValidateForm.phone" autocomplete="off"></el-input>
+                                            <el-input type="age" placeholder="验证码"
+                                                      v-model.number="numberValidateForm.phone"
+                                                      autocomplete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item>
-                                            <el-button type="primary" @click="submitForm('numberValidateForm')">立即申请</el-button>
+                                            <el-button type="primary" @click="submitForm('numberValidateForm')">立即申请
+                                            </el-button>
                                         </el-form-item>
                                     </el-form>
                                 </div>
@@ -64,7 +69,7 @@
                                      style="width: 600px;
                                             height:450px;
                                             float: left"
-                                      @click="toBuy(1)"></div>
+                                     @click="toBuy(1)"></div>
                                 <ul id="img_1" @click="toBuy(2)"></ul>
                                 <ul id="img_2" @click="toBuy(2)"></ul>
                                 <ul id="img_3" @click="toBuy(2)"></ul>
@@ -82,8 +87,8 @@
                             <div class="loan" style="margin: 0 auto;margin-top: 40px;width:1300px;height:150px;">
                                 <ul style="width: 150px;">
                                     <i class="el-icon-document" style="font-size: 50px;margin-left: 30px"></i>
-                                        <h2 style="margin-left: 15px">30秒申请</h2>
-                                        <li style="list-style: none;">需要分期购车,提交基本信息即可申请</li>
+                                    <h2 style="margin-left: 15px">30秒申请</h2>
+                                    <li style="list-style: none;">需要分期购车,提交基本信息即可申请</li>
                                 </ul>
                                 <ul>
                                     <i class="el-icon-arrow-right" style="font-size: 50px"></i>
@@ -127,19 +132,19 @@
                         </el-row>
                     </el-col>
                 </el-row>
-            </el-col>
-        </el-row>
+            </el-main>
+        </div>
         <Myfooter/>
     </div>
 </template>
 
 <script>
-    import Myheader from '../common/Header.vue';
     import Myfooter from '../common/Footer.vue';
     export default {
-        name: "Finance",
-        components: {Myheader, Myfooter},
-
+        name: 'Finance',
+        components: {
+            Myfooter
+        },
         data() {
             return {
                 numberValidateForm: {
@@ -159,34 +164,37 @@
                     }
                 });
             },
-            toBuy(id){
-                this.$router.push({path:'/buycar',query: {id:id}})
+            toBuy(id) {
+                this.$router.push({ path: '/buycar', query: { id: id } });
             }
         }
-    }
+    };
 </script>
 
 <style scoped>
 
     /*申请流程*/
-    .shengqing_2 ul{
+    .shengqing_2 ul {
         margin-top: 25px;
         margin-left: 90px;
         float: left
     }
-    .shengqing_2 ul li{
-        list-style:none;
+
+    .shengqing_2 ul li {
+        list-style: none;
         margin-left: 38px;
     }
+
     /*验证码部分*/
-    .shengqing_1{
+    .shengqing_1 {
         margin-top: 25px;
         margin-left: 200px;
         width: 300px;
         height: 250px;
         border: 2px red solid;
     }
-    .shengqing_1/deep/ input{
+
+    .shengqing_1 /deep/ input {
         margin-left: -80px;
         margin-top: 30px;
         float: left;
@@ -195,45 +203,53 @@
     }
 
     /*分期购车图片*/
-    .jump_buy ul{
+    .jump_buy ul {
         float: left;
         width: 228px;
         height: 220px;
     }
-    .big_img{
+
+    .big_img {
         background-image: url("../../assets/Finance/car_1.png");
         background-size: 100% 100%;
     }
-    #img_1{
+
+    #img_1 {
         background-image: url("../../assets/Finance/car_2.png");
         background-size: 100% 100%;
     }
-    #img_2{
+
+    #img_2 {
         background-image: url("../../assets/Finance/car_3.png");
         background-size: 100% 100%;
     }
-    #img_3{
+
+    #img_3 {
         background-image: url("../../assets/Finance/car_4.png");
         background-size: 100% 100%;
     }
-    #img_4{
+
+    #img_4 {
         background-image: url("../../assets/Finance/car_5.png");
         background-size: 100% 100%;
     }
-    #img_5{
+
+    #img_5 {
         background-image: url("../../assets/Finance/car_6.png");
         background-size: 100% 100%;
     }
-    #img_6{
+
+    #img_6 {
         background-image: url("../../assets/Finance/car_7.png");
         background-size: 100% 100%;
     }
 
     /*贷款流程*/
-    .loan ul{
+    .loan ul {
         float: left;
         margin-left: 50px;
     }
+
     /*合作单位*/
     .cooperation {
         margin-top: 20px;
@@ -242,7 +258,6 @@
         height: 219px;
         background: url("../../assets/Finance/cooperation.png");
     }
-
 
 
 </style>
