@@ -500,7 +500,7 @@
                                             {{car.price}}.00
                                             <span>万</span>
                                         </p>
-                                        <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{car.price*0.3}}万</em>
+                                        <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
                                         <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
                                     </div>
                                 </div>

@@ -40,7 +40,14 @@ export default {
     },
     login(loginForm){
         return requestPassport({
-            url:"fontSysLogin",
+            url:"fontLogin",
+            method:'post',
+            data:loginForm
+        })
+    },
+    addFinancialPlan(loginForm){
+        return requestPassport({
+            url:"addFinancialPlan",
             method:'post',
             data:loginForm
         })

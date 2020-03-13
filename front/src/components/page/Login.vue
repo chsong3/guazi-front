@@ -117,9 +117,9 @@
                                 alert('请输入数字');
                             } else {
                                 quest.login(this.loginForm).then(response => {
-                                    if (response.data.loginReturn === 'loginSuccess') {
+                                    if (response.data.verifyRes === 'success') {
                                         this.$router.push('/buyCar');
-                                    } else if (response.data.loginReturn === 'loginFaile') {
+                                    } else if (response.data.verifyRes === 'fail') {
                                         alert('验证码错误，请重试！');
                                     };
                                 });

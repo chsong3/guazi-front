@@ -6,28 +6,39 @@
                 <el-row>
                     <el-col>
                         <!--申请框-->
-                        <el-row style="height: 300px;background: ghostwhite">
+                        <el-row class="apply-bg">
                             <el-col>
                                 <!--验证码申请-->
-                                <div class="shengqing_1">
-                                    <h3 style="float: left">定制方案</h3>
-                                    <li style="list-style: none;margin-left: 100px;margin-top: 2px">资质越好，方案越划算</li>
-                                    <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px"
-                                             class="demo-ruleForm">
-                                        <el-form-item prop="age">
-                                            <el-input type="age" placeholder="请输入手机号"
-                                                      v-model.number="numberValidateForm.phone"
-                                                      autocomplete="off"></el-input>
-                                            <el-link>获取验证码</el-link>
-                                            <el-input type="age" placeholder="验证码"
-                                                      v-model.number="numberValidateForm.phone"
-                                                      autocomplete="off"></el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button type="primary" @click="submitForm('numberValidateForm')">立即申请
-                                            </el-button>
-                                        </el-form-item>
-                                    </el-form>
+                                <div class="login-form">
+                                    <div style="margin-left: 45px;padding-top: 20px">
+                                        <div style="font-size: 16px;color: #666;padding-bottom: 10px;">定制方案 <span style="font-size: 12px">资质越好，方案越划算</span></div>
+                                        <el-form :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
+                                            <el-form-item prop="phone">
+                                                <el-input type="tel" size="small" @keyup.enter.native="handleLogin"
+                                                          v-model="loginForm.phone"
+                                                          auto-complete="off" placeholder="请输入手机号码">
+                                                    <i slot="prefix" class="icon-shouji"></i>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item prop="code">
+                                                <el-input size="small" @keyup.enter.native="handleLogin"
+                                                          v-model="loginForm.code" auto-complete="off"
+                                                          placeholder="请输入验证码">
+                                                    <i slot="prefix" class="icon-yanzhengma" style="margin-top:6px;"></i>
+                                                    <template slot="append" class="code">
+                                                    <span @click="sendCode" class="msg-text"
+                                                          :class="[{display:msgKey}]">{{msgText}}</span>
+                                                    </template>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button size="medium" type="danger" @click.native.prevent="handleLogin"
+                                                           class="login-submit">立即申请
+                                                </el-button>
+                                                <div v-if="applySuccess" style="color: red">申请成功，稍后会有瓜子客户联系您！</div>
+                                            </el-form-item>
+                                        </el-form>
+                                    </div>
                                 </div>
                             </el-col>
                         </el-row>
@@ -140,18 +151,56 @@
 
 <script>
     import Myfooter from '../common/Footer.vue';
+
+    const MSGINIT = '发送验证码',
+        MSGERROR = '验证码发送失败',
+        MSGSCUCCESS = '${time}秒后重发',
+        MSGTIME = 60;
+    import quest from '../../api/index';
+
     export default {
         name: 'Finance',
         components: {
             Myfooter
         },
         data() {
+            const validatePhone = (rule, value, callback) => {
+                const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
+                if (!value) {
+                    return callback(new Error('电话号码不能为空'));
+                }
+                setTimeout(() => {
+                    // Number.isInteger是es6验证数字是否为整数的方法,但是我实际用的时候输入的数字总是识别成字符串
+                    // 所以我就在前面加了一个+实现隐式转换
+
+                    if (!Number.isInteger(+value)) {
+                        callback(new Error('请输入数字值'));
+                    } else {
+                        if (phoneReg.test(value)) {
+                            callback();
+                        } else {
+                            callback(new Error('电话号码格式不正确'));
+                        }
+                    }
+                }, 100);
+            };
             return {
                 numberValidateForm: {
                     phone: ''
-                }
+                },
+                centerDialogVisible: false,
+                msgText: MSGINIT,
+                msgTime: MSGTIME,
+                msgKey: false,
+                loginForm: {
+                    phone: '',
+                    code: ''
+                },
+                loginRules: {
+                    phone: [{ required: true, trigger: 'blur', validator: validatePhone }]
+                },
+                applySuccess:false
             };
-
         },
         methods: {
             submitForm(formName) {
@@ -166,6 +215,53 @@
             },
             toBuy(id) {
                 this.$router.push({ path: '/buycar', query: { id: id } });
+            },
+            sendCode() {
+                this.$refs.loginForm.validate(valid => {
+                    if (valid) {
+                        quest.sendCode(this.loginForm.phone).then(response => {
+                            alert(response.data.message);
+                        });
+                        if (this.msgKey) return;
+                        this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime);
+                        this.msgKey = true;
+                        const time = setInterval(() => {
+                            this.msgTime--;
+                            this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime);
+                            if (this.msgTime == 0) {
+                                this.msgTime = MSGTIME;
+                                this.msgText = MSGINIT;
+                                this.msgKey = false;
+                                clearInterval(time);
+                            }
+                        }, 1000);
+                    }
+                    ;
+                });
+            },
+            handleLogin() {
+                this.$refs.loginForm.validate(valid => {
+                    if (valid) {
+                        let code = this.loginForm.code;
+                        if (code.length != 6) {
+                            alert('请输入6位数的验证码');
+                        } else {
+                            let val = code.trim();
+                            const phoneReg = /^[1-9]\d*$|^$/;
+                            if (!(phoneReg.test(val))) {
+                                alert('请输入数字');
+                            } else {
+                                quest.addFinancialPlan(this.loginForm).then(response => {
+                                    if (response.data.verifyRes === 'success') {
+                                        this.applySuccess = true
+                                    } else if (response.data.verifyRes === 'fail') {
+                                        alert('验证码错误，请重试！');
+                                    };
+                                });
+                            }
+                        }
+                    }
+                });
             }
         }
     };
@@ -259,5 +355,35 @@
         background: url("../../assets/Finance/cooperation.png");
     }
 
+    .msg-text {
+        display: block;
+        width: 60px;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+    }
 
+    .msg-text.display {
+        color: #ccc;
+    }
+
+    .login-form {
+        width: 20%;
+        height: 200px;
+        margin-top: 50px;
+        margin-left:200px;
+        background: white;
+    }
+
+    .code {
+        margin-left: 20px;
+    }
+
+    .apply-bg {
+        height: 300px;
+        background: ghostwhite;
+        background-image: url(https://jr-sta.guazistatic.com/finance_web/banner.5355155850faa0c33e6316a71c94c6d9.png);
+    background-size: cover;
+        background-repeat: no-repeat;
+    }
 </style>
