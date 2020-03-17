@@ -540,6 +540,7 @@
     export default {
         data() {
             return {
+                cityId:this.$store.state.cityId,
                 searchInput: '',
                 FristPin: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z'],
                 brandJson: [],
@@ -671,6 +672,11 @@
                 },
                 deep: true,
                 immediate: true
+            },
+            cityId:{
+                handler(newName,oldName){
+                    this.carFrom.area=newName
+                }
             }
         },
         computed: {
@@ -684,7 +690,22 @@
             Footer
         },
         mounted() {
+            this.carFrom.area = this.$store.state.cityId;
             this.loadData();
+            switch (this.$route.query.id) {
+                case 1:
+                    this.clickPrice(1,1)
+                    break;
+                case 2:
+                    this.clickPrice(2,2)
+                    break;
+                case 3:
+                    this.clickPrice(3,3)
+                    break;
+                case 4:
+                    this.clickPrice(3,3)
+                    break;
+            }
         },
         methods: {
             loadData() {

@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/common.css'
 import SlideVerify from './components/lib/index';
 import store from './store/index'
+import pinyin from 'js-pinyin'
 
 Vue.use(ElementUI, {
     size: 'small'

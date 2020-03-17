@@ -10,7 +10,13 @@ const requestPassport = axios.create({
     timeout: 20000 // 请求超时时间
 })
 
+const requestUser = axios.create({
+    baseURL: "http://localhost:8080",
+    timeout: 20000 // 请求超时时间
+})
+
 export default {
     requestCarInfo,
-    requestPassport
+    requestPassport,
+    requestUser
 }

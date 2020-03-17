@@ -82,8 +82,8 @@
                                             float: left"
                                      @click="toBuy(1)"></div>
                                 <ul id="img_1" @click="toBuy(2)"></ul>
-                                <ul id="img_2" @click="toBuy(2)"></ul>
-                                <ul id="img_3" @click="toBuy(2)"></ul>
+                                <ul id="img_2" @click="toBuy(3)"></ul>
+                                <ul id="img_3" @click="toBuy(4)"></ul>
                                 <ul id="img_4" @click="toBuy(2)"></ul>
                                 <ul id="img_5" @click="toBuy(2)"></ul>
                                 <ul id="img_6" @click="toBuy(2)"></ul>
@@ -199,10 +199,45 @@
                 loginRules: {
                     phone: [{ required: true, trigger: 'blur', validator: validatePhone }]
                 },
-                applySuccess:false
+                applySuccess:false,
+                carFrom: {
+                    id: '', //编号
+                    brandId: '',//品牌
+                    seriesId: '',//系列
+                    userId: '',//车的所属人
+                    price: '',//价格
+                    beginPrice: '',//价格范围
+                    endPrice: '',//价格范围
+                    carImageList: [],//图片列表
+                    defaultImg: '',//默认图片
+                    carDesc: '',//描述
+                    buyTime: '',//车辆买入时间
+                    createTime: '',//车辆在瓜子上架时间
+                    //saleState: '',//车辆销售状态，1表示已经售出，0表示没有售出
+                    //isShow: '',//是否显示该记录
+                    type: '',//车型
+                    mileage: '',//里程数
+                    displacement: '',//排量
+                    seatNum: '',//座位数量
+                    dischargeStandard: '',//排放标准
+                    oilType: '',//燃油类型
+                    color: '',//颜色
+                    area: '',//车辆所在地
+                    driveType: '',//驱动类型
+                    country: '',//国别
+                    otherDeploy: '',//其他亮点配置',
+                    pageIndex: 1,
+                    pageSize: 10
+                },
+                carList: [],//车列表
             };
         },
+        mounted(){
+            this.loadDate();
+        },
         methods: {
+            loadDate(){
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -385,5 +420,11 @@
         background-image: url(https://jr-sta.guazistatic.com/finance_web/banner.5355155850faa0c33e6316a71c94c6d9.png);
     background-size: cover;
         background-repeat: no-repeat;
+    }
+
+    .card-image {
+        width: 260px;
+        height: 192px;
+        margin-left: 10px;
     }
 </style>

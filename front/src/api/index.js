@@ -4,6 +4,7 @@ import request from '@/utils/request'
 const requestCarInfo = request.requestCarInfo;
 const requestPassport = request.requestPassport;
 const requestLogin = request.requestPassport;
+const requestUser = request.requestUser;
 
 export default {
 
@@ -51,7 +52,14 @@ export default {
             method:'post',
             data:loginForm
         })
-    }
+    },
+    //获取城市
+    getCityList() {
+        return requestUser({
+            url: 'getCityList',
+            method: 'post'
+        });
+    },
 }
 Date.prototype.format = function (fmt) { //author: meizz
     let o = {
