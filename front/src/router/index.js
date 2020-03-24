@@ -36,6 +36,11 @@ export default new Router({
                     meta: { title: '瓜子金融' },
                 },
                 {
+                    path: '/personal',
+                    component: () => import(/* webpackChunkName: "index" */ '../components/page/Personal.vue'),
+                    meta: { title: '个人中心' },
+                },
+                {
                     path: '/blank',
                     component: () => import(/* webpackChunkName: "index" */ '../components/page/Blank.vue'),
                     meta: { title: '空白页面' },
