@@ -21,9 +21,7 @@
             <!-- 右列表 s -->
             <div class="person-right">
                 <el-row class="cardList">
-                    <el-col v-show="carList.length==0">
-                        抱歉，没有找到您的爱车，请换个条件试试吧！
-                    </el-col>
+
                     <template v-for="(car,index) in carList">
                         <el-col :span="8" style="cursor: pointer;">
                             <el-card>
@@ -134,6 +132,10 @@
                     collectCar: true,
                     carRecord: false
                 }
+                this.carList = []
+                request.getCollectCarList(this.user.id).then(response => {
+                    this.carList = response.data.map;
+                });
             },
             //查看浏览记录
             catRecord() {

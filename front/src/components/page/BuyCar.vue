@@ -484,7 +484,7 @@
                         抱歉，没有找到您的爱车，请换个条件试试吧！
                     </el-col>
                     <template v-for="(car,index) in carList">
-                        <el-col :span="6"  style="cursor: pointer;">
+                        <el-col :span="6">
                             <el-card>
                                 <div @click="clickOneCar(car)">
                                     <img class="card-image"
@@ -1022,7 +1022,6 @@
             },
             //浏览记录
             clickOneCar(car){
-                debugger
                 let record = this.$cookies.get("carRecord");
                 if(record != null){
                     var records = record.split('-');
@@ -1037,7 +1036,11 @@
                 }else {
                     this.$cookies.set("carRecord",car.id,-1)
                 }
-
+                let routeUrl = this.$router.resolve({
+                    path: "/carDetail",
+                    query:car
+                });
+                window.open(routeUrl .href, '_blank');
             }
         }
     };
@@ -1288,6 +1291,7 @@
 
     .cardList .el-card:hover {
         border: #DCDFE6 solid;
+        cursor: pointer;
     }
 
     .card-image {

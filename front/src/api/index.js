@@ -74,6 +74,38 @@ export default {
             method: 'post'
         });
     },
+    //查看是否收藏车辆
+    catIsCollect(collectData){
+        return requestCarInfo({
+            url:'catIsCollect',
+            method:'post',
+            data:collectData
+        })
+    },
+    //收藏车辆
+    addCollectCar(collectData){
+        return requestCarInfo({
+            url:'addCollectCar',
+            method:'post',
+            data:collectData
+        })
+    },
+    //取消收藏车辆
+    cancelCollectCar(collectData){
+        return requestCarInfo({
+            url:'cancelCollectCar',
+            method:'post',
+            data:collectData
+        })
+    },
+    //查看收藏车辆
+    getCollectCarList(userId){
+        return requestCarInfo({
+            url:'getCollectCarList',
+            method:'post',
+            data:userId
+        })
+    }
 }
 Date.prototype.format = function (fmt) { //author: meizz
     let o = {
