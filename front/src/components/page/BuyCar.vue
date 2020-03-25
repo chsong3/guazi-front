@@ -484,24 +484,26 @@
                         抱歉，没有找到您的爱车，请换个条件试试吧！
                     </el-col>
                     <template v-for="(car,index) in carList">
-                        <el-col :span="6">
+                        <el-col :span="6"  style="cursor: pointer;">
                             <el-card>
-                                <img class="card-image"
-                                     :src="car.defaultImg">
-                                <div>
-                                    <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
-                                    <div class="car-time">
-                                        {{car.buyTime}}
-                                        <span>|</span>
-                                        6.0万公里
-                                    </div>
-                                    <div class="car-price">
-                                        <p>
-                                            {{car.price}}.00
-                                            <span>万</span>
-                                        </p>
-                                        <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
-                                        <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
+                                <div @click="clickOneCar(car)">
+                                    <img class="card-image"
+                                         :src="car.defaultImg">
+                                    <div>
+                                        <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
+                                        <div class="car-time">
+                                            {{car.buyTime}}
+                                            <span>|</span>
+                                            6.0万公里
+                                        </div>
+                                        <div class="car-price">
+                                            <p>
+                                                {{car.price}}.00
+                                                <span>万</span>
+                                            </p>
+                                            <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
+                                            <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
+                                        </div>
                                     </div>
                                 </div>
                             </el-card>
@@ -1017,6 +1019,25 @@
                     payThree: false,
                     selectCar: true
                 };
+            },
+            //浏览记录
+            clickOneCar(car){
+                debugger
+                let record = this.$cookies.get("carRecord");
+                if(record != null){
+                    var records = record.split('-');
+                    let id=records.filter(value => {
+                        return value == car.id
+                    })
+                    if (id.length == 0){
+                        record = record+'-'+car.id
+                        this.$cookies.remove("carRecord")
+                        this.$cookies.set("carRecord",record,-1)
+                    }
+                }else {
+                    this.$cookies.set("carRecord",car.id,-1)
+                }
+
             }
         }
     };

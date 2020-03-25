@@ -8,13 +8,13 @@
                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                     <div>&nbsp;个人中心</div>
                 </div>
-                <div><span style="font-size: 12px;color: #8492a6">&nbsp;&nbsp;&nbsp;手机号码:18581379858</span></div>
+                <div><span style="font-size: 12px;color: #8492a6">&nbsp;&nbsp;&nbsp;手机号码:{{user.phone}}</span></div>
 
                 <div class="person-menu">
-                    <div class="person-menu-item">收藏车辆</div>
-                    <div class="person-menu-item">降价提醒</div>
-                    <div class="person-menu-item">浏览记录</div>
-                </div>
+                    <div class="person-menu-item" :class="{greenBgActive:activeClass.collectCar}" @click="catCollect">收藏车辆</div>
+                    <!--                    <div class="person-menu-item">降价提醒</div>-->
+                    <div class="person-menu-item" :class="{greenBgActive:activeClass.carRecord}" @click="catRecord">浏览记录</div>
+        </div>
             </div>
             <!-- 左菜单 e -->
 
@@ -25,24 +25,27 @@
                         抱歉，没有找到您的爱车，请换个条件试试吧！
                     </el-col>
                     <template v-for="(car,index) in carList">
-                        <el-col :span="6">
+                        <el-col :span="8" style="cursor: pointer;">
                             <el-card>
-                                <img class="card-image"
-                                     :src="car.defaultImg">
                                 <div>
-                                    <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
-                                    <div class="car-time">
-                                        {{car.buyTime}}
-                                        <span>|</span>
-                                        6.0万公里
-                                    </div>
-                                    <div class="car-price">
-                                        <p>
-                                            {{car.price}}.00
-                                            <span>万</span>
-                                        </p>
-                                        <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
-                                        <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
+                                    <img class="card-image"
+                                         :src="car.defaultImg">
+                                    <div>
+                                        <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
+                                        <div class="car-time">
+                                            {{car.buyTime}}
+                                            <span>|</span>
+                                            6.0万公里
+                                        </div>
+                                        <div class="car-price">
+                                            <p>
+                                                {{car.price}}.00
+                                                <span>万</span>
+                                            </p>
+                                            <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
+                                            <em v-else="car.otherDeploy!='1'"
+                                                class="line-through">{{car.price+1.2}}万</em>
+                                        </div>
                                     </div>
                                 </div>
                             </el-card>
@@ -69,9 +72,11 @@
 </template>
 
 <script>
+    import request from '../../api/index';
+
     export default {
-        data(){
-            return{
+        data() {
+            return {
                 carList: [],//车列表
                 carFrom: {
                     id: '', //编号
@@ -102,7 +107,12 @@
                     pageIndex: 1,
                     pageSize: 10
                 },
-            }
+                user: '',
+                activeClass: {
+                    collectCar: false,
+                    carRecord: false
+                }
+            };
         },
         computed: {
             //计算属性 总条数
@@ -110,11 +120,36 @@
                 return this.carList.length;
             }
         },
-        methods:{
+        mounted() {
+            this.user = this.$cookies.get('user');
+        },
+        methods: {
             // 分页导航
             handlePageChange(val) {
                 this.carFrom.pageIndex = val;
             },
+            //查看收藏车辆
+            catCollect() {
+                this.activeClass = {
+                    collectCar: true,
+                    carRecord: false
+                }
+            },
+            //查看浏览记录
+            catRecord() {
+                this.activeClass = {
+                    collectCar: false,
+                    carRecord: true
+                }
+                let record = this.$cookies.get('carRecord');
+                this.getCarInfoListByIds(record);
+            },
+            //根据多个id查询
+            getCarInfoListByIds(record) {
+                request.getCarInfoListByIds(record).then(response => {
+                    this.carList = response.data.map;
+                });
+            }
         }
     };
 </script>
@@ -146,19 +181,28 @@
         margin-left: 30px;
         margin-top: 20px;
     }
-    .person-menu{
+
+    .person-menu {
         margin-top: 20px;
     }
-    .person-menu-item{
+
+    .person-menu-item {
         width: 100%;
         height: 40px;
         text-align: center;
         line-height: 40px;
         font-size: 18px;
         margin-top: 10px;
+
     }
-    .person-menu-item:hover{
-        background: #00a854 ;
+
+    .greenBgActive {
+        background: #00a854;
+    }
+
+    .person-menu-item:hover {
+        background: #00a854;
+        cursor: pointer;
     }
 
     .cardList .el-card {

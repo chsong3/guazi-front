@@ -31,7 +31,21 @@ export default {
             data:query
         })
     },
-
+    // 根据id获取二手车信息
+    getCarInfoById(id) {
+        return requestCarInfo({
+            url: 'getCarInfoById?id=' + id,
+            method: 'post'
+        });
+    },
+    //根据多个id查询
+    getCarInfoListByIds(ids) {
+        return requestCarInfo({
+            url: 'getCarInfoListByIds',
+            method: 'post',
+            data:ids
+        });
+    },
     //发送验证码
     sendCode(phoneNum){
         return requestPassport({
