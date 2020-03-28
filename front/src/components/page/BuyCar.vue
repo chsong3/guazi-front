@@ -11,8 +11,9 @@
                         </div>
                     </el-col>
                     <el-col :span="8">
-                        <el-autocomplete v-model="searchInput" placeholder="请输入内容"
+                        <el-autocomplete clearable v-model="searchInput" placeholder="请输入内容"
                                          :fetch-suggestions="querySearchAsync"
+                                         @clear="searchClear"
                                          suffix-icon="el-input__icon el-icon-search"
                                          @select="searchSelect"
                         >
@@ -67,7 +68,7 @@
                                 <el-col :span="2" class="item-head drop-head">
                                     <span class="item-head-font gray-font"></span>
                                 </el-col>
-                                <el-col :span="22" class="drop-item">
+                                <el-col :span="22">
                                     <!--按字母排序分为左边 右边，这是左边部分-->
                                     <div class="item-col"><!--item-for:html内容超出了div或p的宽度让内容自动换行-->
                                         <div class="item-for" v-for="(item,index) in brandJson">
@@ -87,7 +88,7 @@
                                     <!--按字母排序分为左边 右边，这是右边部分-->
                                     <div class="item-col">
                                         <div class="item-for" v-for="(item,index) in brandJson">
-                                            <div class="item-list" v-show="index>(brandJson.length/2)">
+                                            <div class="item-list" v-show="index>=(brandJson.length/2)">
                                                 <div class="pinyin">
                                                     <span>{{item.name}}</span>
                                                 </div>
@@ -101,6 +102,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div>&nbsp;</div>
                                 </el-col>
                             </el-row>
                         </el-col>
@@ -144,13 +146,13 @@
                         </el-col>
                     </el-row>
                     <!--车系筛选 下拉框 车系-->
-                    <el-row :span="24" class="condition-item" v-show="show.seriesAllShow">
+                    <el-row :span="24" style="border-bottom: 1px #DCDFE6 solid;" v-show="show.seriesAllShow">
                         <el-col :span="22">
                             <el-row>
                                 <el-col :span="2" class="item-head drop-head">
                                     <span class="item-head-font gray-font"></span>
                                 </el-col>
-                                <el-col :span="22" class="drop-item">
+                                <el-col :span="22">
                                     <!--按字母排序分为左边 右边，这是左边部分-->
                                     <div class="item-col">
                                         <div class="item-for" v-for="(item,index) in seriesJson">
@@ -171,7 +173,7 @@
                                     <!--按字母排序分为左边 右边，这是右边部分-->
                                     <div class="item-col">
                                         <div class="item-for" v-for="(item,index) in seriesJson">
-                                            <div class="item-list" v-show="index>(seriesJson.length/2)">
+                                            <div class="item-list" v-show="index>=(seriesJson.length/2)">
                                                 <div class="pinyin">
                                                     <span>{{item.name}}</span>
                                                 </div>
@@ -185,6 +187,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div>&nbsp;</div>
                                 </el-col>
                             </el-row>
                         </el-col>
@@ -606,6 +609,7 @@
                     id: '', //编号
                     brandId: '',//品牌
                     seriesId: '',//系列
+                    seriesName:'',
                     userId: '',//车的所属人
                     price: '',//价格
                     beginPrice: '',//价格范围
@@ -873,15 +877,19 @@
             },
             createStateFilter(queryString) {
                 return this.carList.filter((value) => {
-                    return value.seriesName == queryString;
+                    return value.seriesName.indexOf(queryString)===0;
                 });
             },
             searchSelect(item) {
-                let seriesName = this.carList.filter((value) => {
-                    return value.seriesName = item.value;
+                let car = this.carList.filter((value) => {
+                    return value.seriesName == item.value;
                 });
-                this.carFrom.seriesId = seriesName[0];
+                this.carFrom.seriesName = car[0].seriesName;
                 this.getCarInfo(this.carFrom);
+            },
+            //清空输入框触发
+            searchClear(){
+               this.$router.go(0)
             },
             clickBrand(id) {
                 this.carFrom.seriesId = '';//清空条件
@@ -1133,7 +1141,7 @@
     }
 
     .drop-head {
-        height: 220px;
+
     }
 
     .price span {
