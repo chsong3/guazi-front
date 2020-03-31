@@ -105,6 +105,13 @@ export default {
             method:'post',
             data:userId
         })
+    },
+    //查看该车辆的图片
+    queryCarImg(carId){
+        return requestCarInfo({
+            url:'queryCarImg?carId='+carId,
+            method:'post'
+        })
     }
 }
 Date.prototype.format = function (fmt) { //author: meizz
