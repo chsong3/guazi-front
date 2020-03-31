@@ -48,6 +48,10 @@ export default new Router({
             ]
         },
         {
+            path: '/sellCar',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/SellCar.vue')
+        },
+        {
             path: '*',
             redirect: '/404'
         },

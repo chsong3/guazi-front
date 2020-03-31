@@ -4,7 +4,7 @@
             <el-main>
                 <!--条件筛选部分-->
                 <!--搜索框-->
-                <el-row>
+                <el-row>0
                     <el-col :span="16">
                         <div>
                             <span>瓜子二手车>重庆二手车</span>
