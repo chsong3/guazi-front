@@ -1,9 +1,6 @@
 <template>
     <div>
         <div class="body">
-            <el-header>
-                <Header></Header>
-            </el-header>
             <el-main>
                 <!--条件筛选部分-->
                 <!--搜索框-->
@@ -14,8 +11,10 @@
                         </div>
                     </el-col>
                     <el-col :span="8">
-                        <el-autocomplete v-model="searchInput" placeholder="请输入内容"
-                                         :fetch-suggestions="querySearchAsync" suffix-icon="el-input__icon el-icon-search"
+                        <el-autocomplete clearable v-model="searchInput" placeholder="请输入内容"
+                                         :fetch-suggestions="querySearchAsync"
+                                         @clear="searchClear"
+                                         suffix-icon="el-input__icon el-icon-search"
                                          @select="searchSelect"
                         >
                         </el-autocomplete>
@@ -69,7 +68,7 @@
                                 <el-col :span="2" class="item-head drop-head">
                                     <span class="item-head-font gray-font"></span>
                                 </el-col>
-                                <el-col :span="22" class="drop-item">
+                                <el-col :span="22">
                                     <!--按字母排序分为左边 右边，这是左边部分-->
                                     <div class="item-col"><!--item-for:html内容超出了div或p的宽度让内容自动换行-->
                                         <div class="item-for" v-for="(item,index) in brandJson">
@@ -89,7 +88,7 @@
                                     <!--按字母排序分为左边 右边，这是右边部分-->
                                     <div class="item-col">
                                         <div class="item-for" v-for="(item,index) in brandJson">
-                                            <div class="item-list" v-show="index>(brandJson.length/2)">
+                                            <div class="item-list" v-show="index>=(brandJson.length/2)">
                                                 <div class="pinyin">
                                                     <span>{{item.name}}</span>
                                                 </div>
@@ -103,6 +102,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div>&nbsp;</div>
                                 </el-col>
                             </el-row>
                         </el-col>
@@ -146,13 +146,13 @@
                         </el-col>
                     </el-row>
                     <!--车系筛选 下拉框 车系-->
-                    <el-row :span="24" class="condition-item" v-show="show.seriesAllShow">
+                    <el-row :span="24" style="border-bottom: 1px #DCDFE6 solid;" v-show="show.seriesAllShow">
                         <el-col :span="22">
                             <el-row>
                                 <el-col :span="2" class="item-head drop-head">
                                     <span class="item-head-font gray-font"></span>
                                 </el-col>
-                                <el-col :span="22" class="drop-item">
+                                <el-col :span="22">
                                     <!--按字母排序分为左边 右边，这是左边部分-->
                                     <div class="item-col">
                                         <div class="item-for" v-for="(item,index) in seriesJson">
@@ -173,7 +173,7 @@
                                     <!--按字母排序分为左边 右边，这是右边部分-->
                                     <div class="item-col">
                                         <div class="item-for" v-for="(item,index) in seriesJson">
-                                            <div class="item-list" v-show="index>(seriesJson.length/2)">
+                                            <div class="item-list" v-show="index>=(seriesJson.length/2)">
                                                 <div class="pinyin">
                                                     <span>{{item.name}}</span>
                                                 </div>
@@ -187,6 +187,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div>&nbsp;</div>
                                 </el-col>
                             </el-row>
                         </el-col>
@@ -434,11 +435,23 @@
                     <!--list头部-->
                     <el-row>
                         <el-col :span="8" class="list-head-left">
-                            <span class="list-head-font1 item-pointer">全部</span>
+                            <span class="list-head-font1 item-pointer list-head-active"
+                                  :class="{listHeadActive:listHeadActive.all}"
+                                  @click="clickAll">
+                                全部
+                            </span>
                             <em></em>
-                            <span class="list-head-font1 item-pointer">付三成</span>
+                            <span class="list-head-font1 item-pointer"
+                                  :class="{listHeadActive:listHeadActive.payThree}"
+                                  @click="clickPayThree">
+                                付三成
+                            </span>
                             <em></em>
-                            <span class="list-head-font1 item-pointer">严选车<i></i></span>
+                            <span class="list-head-font1 item-pointer"
+                                  :class="{listHeadActive:listHeadActive.selectCar}"
+                                  @click="clickSelect">
+                                严选车<i></i>
+                            </span>
                         </el-col>
                         <el-col :span="16">
                             <div class="list-head-right">
@@ -476,21 +489,24 @@
                     <template v-for="(car,index) in carList">
                         <el-col :span="6">
                             <el-card>
-                                <img class="card-image"
-                                     :src="car.defaultImg">
-                                <div>
-                                    <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
-                                    <div class="car-time">
-                                        {{car.buyTime}}
-                                        <span>|</span>
-                                        6.0万公里
-                                    </div>
-                                    <div class="car-price">
-                                        <p>
-                                            {{car.price}}.00
-                                            <span>万</span>
-                                        </p>
-                                        <em class="line-through">169.2万</em>
+                                <div @click="clickOneCar(car)">
+                                    <img class="card-image"
+                                         :src="car.defaultImg">
+                                    <div>
+                                        <h2 class="car-dec">{{car.brandName}} {{car.seriesName}} {{car.carDesc}}</h2>
+                                        <div class="car-time">
+                                            {{car.buyTime}}
+                                            <span>|</span>
+                                            6.0万公里
+                                        </div>
+                                        <div class="car-price">
+                                            <p>
+                                                {{car.price}}.00
+                                                <span>万</span>
+                                            </p>
+                                            <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
+                                            <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
+                                        </div>
                                     </div>
                                 </div>
                             </el-card>
@@ -521,7 +537,7 @@
 
 <script>
     import Footer from '../common/Footer.vue';
-    import Header from '../common/Header.vue';
+    //import Header from '../common/Header.vue';
     import quest from '../../api/index';
     import { currentDate, currentDateStr } from '../../api/index';
     import pinyin from '../../../node_modules/js-pinyin/index';
@@ -529,6 +545,7 @@
     export default {
         data() {
             return {
+                cityId:this.$store.state.cityId,
                 searchInput: '',
                 FristPin: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z'],
                 brandJson: [],
@@ -550,6 +567,11 @@
                 ],
                 showTags: {
                     typeTags: true
+                },
+                listHeadActive: {
+                    all: true,
+                    payThree: false,
+                    selectCar: false
                 },
                 showClass: {
                     active: true,
@@ -587,6 +609,7 @@
                     id: '', //编号
                     brandId: '',//品牌
                     seriesId: '',//系列
+                    seriesName:'',
                     userId: '',//车的所属人
                     price: '',//价格
                     beginPrice: '',//价格范围
@@ -655,6 +678,11 @@
                 },
                 deep: true,
                 immediate: true
+            },
+            cityId:{
+                handler(newName,oldName){
+                    this.carFrom.area=newName
+                }
             }
         },
         computed: {
@@ -664,11 +692,26 @@
             }
         },
         components: {
-            Header,
+            //Header,
             Footer
         },
         mounted() {
+            this.carFrom.area = this.$store.state.cityId;
             this.loadData();
+            switch (this.$route.query.id) {
+                case 1:
+                    this.clickPrice(1,1)
+                    break;
+                case 2:
+                    this.clickPrice(2,2)
+                    break;
+                case 3:
+                    this.clickPrice(3,3)
+                    break;
+                case 4:
+                    this.clickPrice(3,3)
+                    break;
+            }
         },
         methods: {
             loadData() {
@@ -825,24 +868,28 @@
             },
             querySearchAsync(queryString, cb) {
                 var results = [];
-                   results = queryString ? this.createStateFilter(queryString) : this.carList;
-                let cbResult=[];
-                for(let i=0;i<results.length;i++){
-                    cbResult.push({'value':results[i].seriesName})
+                results = queryString ? this.createStateFilter(queryString) : this.carList;
+                let cbResult = [];
+                for (let i = 0; i < results.length; i++) {
+                    cbResult.push({ 'value': results[i].seriesName });
                 }
                 cb(cbResult);
             },
             createStateFilter(queryString) {
                 return this.carList.filter((value) => {
-                    return value.seriesName == queryString;
+                    return value.seriesName.indexOf(queryString)===0;
                 });
             },
-            searchSelect(item){
-                let seriesName=this.carList.filter((value)=>{
-                    return value.seriesName=item.value
-                })
-                this.carFrom.seriesId=seriesName[0];
-                this.getCarInfo(this.carFrom)
+            searchSelect(item) {
+                let car = this.carList.filter((value) => {
+                    return value.seriesName == item.value;
+                });
+                this.carFrom.seriesName = car[0].seriesName;
+                this.getCarInfo(this.carFrom);
+            },
+            //清空输入框触发
+            searchClear(){
+               this.$router.go(0)
             },
             clickBrand(id) {
                 this.carFrom.seriesId = '';//清空条件
@@ -952,8 +999,57 @@
             // 分页导航
             handlePageChange(val) {
                 this.carFrom.pageIndex = val;
+            },
+            //全部
+            clickAll() {
+                this.getCarInfo(this.carFrom);
+                this.listHeadActive = {
+                    all: true,
+                    payThree: false,
+                    selectCar: false
+                };
+            },
+            //付三成
+            clickPayThree() {
+                this.listHeadActive = {
+                    all: false,
+                    payThree: true,
+                    selectCar: false
+                };
+                this.carList = this.carList.filter((value) => {
+                    return value.otherDeploy == '1'
+                })
+            },
+            //严选车
+            clickSelect() {
+                this.listHeadActive = {
+                    all: false,
+                    payThree: false,
+                    selectCar: true
+                };
+            },
+            //浏览记录
+            clickOneCar(car){
+                let record = this.$cookies.get("carRecord");
+                if(record != null){
+                    var records = record.split('-');
+                    let id=records.filter(value => {
+                        return value == car.id
+                    })
+                    if (id.length == 0){
+                        record = record+'-'+car.id
+                        this.$cookies.remove("carRecord")
+                        this.$cookies.set("carRecord",record,-1)
+                    }
+                }else {
+                    this.$cookies.set("carRecord",car.id,-1)
+                }
+                let routeUrl = this.$router.resolve({
+                    path: "/carDetail",
+                    query:car
+                });
+                window.open(routeUrl .href, '_blank');
             }
-
         }
     };
 </script>
@@ -964,31 +1060,26 @@
         list-style: none;
         text-align: -webkit-match-parent;
     }
-
     .gray-font {
         font-family: "Apple Color Emoji";
         color: #777777;
         font-size: 16px;
     }
-
     .condition {
         height: 100%;
         margin-top: 20px;
         border: 1px #DCDFE6 solid;
         border-bottom: white;
     }
-
     .condition-item {
         width: 100%;
         height: 100%;
         border-bottom: 1px #DCDFE6 solid;
     }
-
     .item-head {
         height: 49px;
         background-color: #FAFAFA;
     }
-
     .item-head-font {
         display: block;
         text-align: center;
@@ -1050,7 +1141,7 @@
     }
 
     .drop-head {
-        height: 220px;
+
     }
 
     .price span {
@@ -1140,7 +1231,7 @@
         color: #495056;
     }
 
-    .list-head-font1:hover {
+    .listHeadActive {
         border-bottom: 3px solid #22ac38;
     }
 
@@ -1208,6 +1299,7 @@
 
     .cardList .el-card:hover {
         border: #DCDFE6 solid;
+        cursor: pointer;
     }
 
     .card-image {

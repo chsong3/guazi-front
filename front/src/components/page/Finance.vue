@@ -1,28 +1,44 @@
 <template>
     <div>
-        <Myheader/>
-        <el-row>
-            <el-col>
+        <div>
+            <el-main>
                 <!--头部导航-->
-                <el-row style="height: 400px;background: red">
+                <el-row>
                     <el-col>
                         <!--申请框-->
-                        <el-row style="height: 300px;background: ghostwhite">
+                        <el-row class="apply-bg">
                             <el-col>
                                 <!--验证码申请-->
-                                <div class="shengqing_1">
-                                    <h3 style="float: left">定制方案</h3>
-                                    <li style="list-style: none;margin-left: 100px;margin-top: 2px">资质越好，方案越划算</li>
-                                    <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
-                                        <el-form-item prop="age">
-                                            <el-input  type="age" placeholder="请输入手机号" v-model.number="numberValidateForm.phone" autocomplete="off"></el-input>
-                                            <el-link>获取验证码</el-link>
-                                            <el-input type="age" placeholder="验证码"  v-model.number="numberValidateForm.phone" autocomplete="off"></el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button type="primary" @click="submitForm('numberValidateForm')">立即申请</el-button>
-                                        </el-form-item>
-                                    </el-form>
+                                <div class="login-form">
+                                    <div style="margin-left: 45px;padding-top: 20px">
+                                        <div style="font-size: 16px;color: #666;padding-bottom: 10px;">定制方案 <span style="font-size: 12px">资质越好，方案越划算</span></div>
+                                        <el-form :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
+                                            <el-form-item prop="phone">
+                                                <el-input type="tel" size="small" @keyup.enter.native="handleLogin"
+                                                          v-model="loginForm.phone"
+                                                          auto-complete="off" placeholder="请输入手机号码">
+                                                    <i slot="prefix" class="icon-shouji"></i>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item prop="code">
+                                                <el-input size="small" @keyup.enter.native="handleLogin"
+                                                          v-model="loginForm.code" auto-complete="off"
+                                                          placeholder="请输入验证码">
+                                                    <i slot="prefix" class="icon-yanzhengma" style="margin-top:6px;"></i>
+                                                    <template slot="append" class="code">
+                                                    <span @click="sendCode" class="msg-text"
+                                                          :class="[{display:msgKey}]">{{msgText}}</span>
+                                                    </template>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button size="medium" type="danger" @click.native.prevent="handleLogin"
+                                                           class="login-submit">立即申请
+                                                </el-button>
+                                                <div v-if="applySuccess" style="color: red">申请成功，稍后会有瓜子客户联系您！</div>
+                                            </el-form-item>
+                                        </el-form>
+                                    </div>
                                 </div>
                             </el-col>
                         </el-row>
@@ -64,10 +80,10 @@
                                      style="width: 600px;
                                             height:450px;
                                             float: left"
-                                      @click="toBuy(1)"></div>
+                                     @click="toBuy(1)"></div>
                                 <ul id="img_1" @click="toBuy(2)"></ul>
-                                <ul id="img_2" @click="toBuy(2)"></ul>
-                                <ul id="img_3" @click="toBuy(2)"></ul>
+                                <ul id="img_2" @click="toBuy(3)"></ul>
+                                <ul id="img_3" @click="toBuy(4)"></ul>
                                 <ul id="img_4" @click="toBuy(2)"></ul>
                                 <ul id="img_5" @click="toBuy(2)"></ul>
                                 <ul id="img_6" @click="toBuy(2)"></ul>
@@ -82,8 +98,8 @@
                             <div class="loan" style="margin: 0 auto;margin-top: 40px;width:1300px;height:150px;">
                                 <ul style="width: 150px;">
                                     <i class="el-icon-document" style="font-size: 50px;margin-left: 30px"></i>
-                                        <h2 style="margin-left: 15px">30秒申请</h2>
-                                        <li style="list-style: none;">需要分期购车,提交基本信息即可申请</li>
+                                    <h2 style="margin-left: 15px">30秒申请</h2>
+                                    <li style="list-style: none;">需要分期购车,提交基本信息即可申请</li>
                                 </ul>
                                 <ul>
                                     <i class="el-icon-arrow-right" style="font-size: 50px"></i>
@@ -127,28 +143,101 @@
                         </el-row>
                     </el-col>
                 </el-row>
-            </el-col>
-        </el-row>
+            </el-main>
+        </div>
         <Myfooter/>
     </div>
 </template>
 
 <script>
-    import Myheader from '../common/Header.vue';
     import Myfooter from '../common/Footer.vue';
-    export default {
-        name: "Finance",
-        components: {Myheader, Myfooter},
 
+    const MSGINIT = '发送验证码',
+        MSGERROR = '验证码发送失败',
+        MSGSCUCCESS = '${time}秒后重发',
+        MSGTIME = 60;
+    import quest from '../../api/index';
+
+    export default {
+        name: 'Finance',
+        components: {
+            Myfooter
+        },
         data() {
+            const validatePhone = (rule, value, callback) => {
+                const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
+                if (!value) {
+                    return callback(new Error('电话号码不能为空'));
+                }
+                setTimeout(() => {
+                    // Number.isInteger是es6验证数字是否为整数的方法,但是我实际用的时候输入的数字总是识别成字符串
+                    // 所以我就在前面加了一个+实现隐式转换
+
+                    if (!Number.isInteger(+value)) {
+                        callback(new Error('请输入数字值'));
+                    } else {
+                        if (phoneReg.test(value)) {
+                            callback();
+                        } else {
+                            callback(new Error('电话号码格式不正确'));
+                        }
+                    }
+                }, 100);
+            };
             return {
                 numberValidateForm: {
                     phone: ''
-                }
+                },
+                centerDialogVisible: false,
+                msgText: MSGINIT,
+                msgTime: MSGTIME,
+                msgKey: false,
+                loginForm: {
+                    phone: '',
+                    code: ''
+                },
+                loginRules: {
+                    phone: [{ required: true, trigger: 'blur', validator: validatePhone }]
+                },
+                applySuccess:false,
+                carFrom: {
+                    id: '', //编号
+                    brandId: '',//品牌
+                    seriesId: '',//系列
+                    userId: '',//车的所属人
+                    price: '',//价格
+                    beginPrice: '',//价格范围
+                    endPrice: '',//价格范围
+                    carImageList: [],//图片列表
+                    defaultImg: '',//默认图片
+                    carDesc: '',//描述
+                    buyTime: '',//车辆买入时间
+                    createTime: '',//车辆在瓜子上架时间
+                    //saleState: '',//车辆销售状态，1表示已经售出，0表示没有售出
+                    //isShow: '',//是否显示该记录
+                    type: '',//车型
+                    mileage: '',//里程数
+                    displacement: '',//排量
+                    seatNum: '',//座位数量
+                    dischargeStandard: '',//排放标准
+                    oilType: '',//燃油类型
+                    color: '',//颜色
+                    area: '',//车辆所在地
+                    driveType: '',//驱动类型
+                    country: '',//国别
+                    otherDeploy: '',//其他亮点配置',
+                    pageIndex: 1,
+                    pageSize: 10
+                },
+                carList: [],//车列表
             };
-
+        },
+        mounted(){
+            this.loadDate();
         },
         methods: {
+            loadDate(){
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -159,34 +248,84 @@
                     }
                 });
             },
-            toBuy(id){
-                this.$router.push({path:'/buycar',query: {id:id}})
+            toBuy(id) {
+                this.$router.push({ path: '/buycar', query: { id: id } });
+            },
+            sendCode() {
+                this.$refs.loginForm.validate(valid => {
+                    if (valid) {
+                        quest.sendCode(this.loginForm.phone).then(response => {
+                            alert(response.data.message);
+                        });
+                        if (this.msgKey) return;
+                        this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime);
+                        this.msgKey = true;
+                        const time = setInterval(() => {
+                            this.msgTime--;
+                            this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime);
+                            if (this.msgTime == 0) {
+                                this.msgTime = MSGTIME;
+                                this.msgText = MSGINIT;
+                                this.msgKey = false;
+                                clearInterval(time);
+                            }
+                        }, 1000);
+                    }
+                    ;
+                });
+            },
+            handleLogin() {
+                this.$refs.loginForm.validate(valid => {
+                    if (valid) {
+                        let code = this.loginForm.code;
+                        if (code.length != 6) {
+                            alert('请输入6位数的验证码');
+                        } else {
+                            let val = code.trim();
+                            const phoneReg = /^[1-9]\d*$|^$/;
+                            if (!(phoneReg.test(val))) {
+                                alert('请输入数字');
+                            } else {
+                                quest.addFinancialPlan(this.loginForm).then(response => {
+                                    if (response.data.verifyRes === 'success') {
+                                        this.applySuccess = true
+                                    } else if (response.data.verifyRes === 'fail') {
+                                        alert('验证码错误，请重试！');
+                                    };
+                                });
+                            }
+                        }
+                    }
+                });
             }
         }
-    }
+    };
 </script>
 
 <style scoped>
 
     /*申请流程*/
-    .shengqing_2 ul{
+    .shengqing_2 ul {
         margin-top: 25px;
         margin-left: 90px;
         float: left
     }
-    .shengqing_2 ul li{
-        list-style:none;
+
+    .shengqing_2 ul li {
+        list-style: none;
         margin-left: 38px;
     }
+
     /*验证码部分*/
-    .shengqing_1{
+    .shengqing_1 {
         margin-top: 25px;
         margin-left: 200px;
         width: 300px;
         height: 250px;
         border: 2px red solid;
     }
-    .shengqing_1/deep/ input{
+
+    .shengqing_1 /deep/ input {
         margin-left: -80px;
         margin-top: 30px;
         float: left;
@@ -195,45 +334,53 @@
     }
 
     /*分期购车图片*/
-    .jump_buy ul{
+    .jump_buy ul {
         float: left;
         width: 228px;
         height: 220px;
     }
-    .big_img{
+
+    .big_img {
         background-image: url("../../assets/Finance/car_1.png");
         background-size: 100% 100%;
     }
-    #img_1{
+
+    #img_1 {
         background-image: url("../../assets/Finance/car_2.png");
         background-size: 100% 100%;
     }
-    #img_2{
+
+    #img_2 {
         background-image: url("../../assets/Finance/car_3.png");
         background-size: 100% 100%;
     }
-    #img_3{
+
+    #img_3 {
         background-image: url("../../assets/Finance/car_4.png");
         background-size: 100% 100%;
     }
-    #img_4{
+
+    #img_4 {
         background-image: url("../../assets/Finance/car_5.png");
         background-size: 100% 100%;
     }
-    #img_5{
+
+    #img_5 {
         background-image: url("../../assets/Finance/car_6.png");
         background-size: 100% 100%;
     }
-    #img_6{
+
+    #img_6 {
         background-image: url("../../assets/Finance/car_7.png");
         background-size: 100% 100%;
     }
 
     /*贷款流程*/
-    .loan ul{
+    .loan ul {
         float: left;
         margin-left: 50px;
     }
+
     /*合作单位*/
     .cooperation {
         margin-top: 20px;
@@ -243,6 +390,41 @@
         background: url("../../assets/Finance/cooperation.png");
     }
 
+    .msg-text {
+        display: block;
+        width: 60px;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+    }
 
+    .msg-text.display {
+        color: #ccc;
+    }
 
+    .login-form {
+        width: 20%;
+        height: 200px;
+        margin-top: 50px;
+        margin-left:200px;
+        background: white;
+    }
+
+    .code {
+        margin-left: 20px;
+    }
+
+    .apply-bg {
+        height: 300px;
+        background: ghostwhite;
+        background-image: url(https://jr-sta.guazistatic.com/finance_web/banner.5355155850faa0c33e6316a71c94c6d9.png);
+    background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .card-image {
+        width: 260px;
+        height: 192px;
+        margin-left: 10px;
+    }
 </style>

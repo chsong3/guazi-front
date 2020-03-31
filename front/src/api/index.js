@@ -4,6 +4,7 @@ import request from '@/utils/request'
 const requestCarInfo = request.requestCarInfo;
 const requestPassport = request.requestPassport;
 const requestLogin = request.requestPassport;
+const requestUser = request.requestUser;
 
 export default {
 
@@ -30,7 +31,21 @@ export default {
             data:query
         })
     },
-
+    // 根据id获取二手车信息
+    getCarInfoById(id) {
+        return requestCarInfo({
+            url: 'getCarInfoById?id=' + id,
+            method: 'post'
+        });
+    },
+    //根据多个id查询
+    getCarInfoListByIds(ids) {
+        return requestCarInfo({
+            url: 'getCarInfoListByIds',
+            method: 'post',
+            data:ids
+        });
+    },
     //发送验证码
     sendCode(phoneNum){
         return requestPassport({
@@ -40,9 +55,55 @@ export default {
     },
     login(loginForm){
         return requestPassport({
-            url:"fontSysLogin",
+            url:"fontLogin",
             method:'post',
             data:loginForm
+        })
+    },
+    addFinancialPlan(loginForm){
+        return requestPassport({
+            url:"addFinancialPlan",
+            method:'post',
+            data:loginForm
+        })
+    },
+    //获取城市
+    getCityList() {
+        return requestUser({
+            url: 'getCityList',
+            method: 'post'
+        });
+    },
+    //查看是否收藏车辆
+    catIsCollect(collectData){
+        return requestCarInfo({
+            url:'catIsCollect',
+            method:'post',
+            data:collectData
+        })
+    },
+    //收藏车辆
+    addCollectCar(collectData){
+        return requestCarInfo({
+            url:'addCollectCar',
+            method:'post',
+            data:collectData
+        })
+    },
+    //取消收藏车辆
+    cancelCollectCar(collectData){
+        return requestCarInfo({
+            url:'cancelCollectCar',
+            method:'post',
+            data:collectData
+        })
+    },
+    //查看收藏车辆
+    getCollectCarList(userId){
+        return requestCarInfo({
+            url:'getCollectCarList',
+            method:'post',
+            data:userId
         })
     }
 }

@@ -6,12 +6,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/common.css'
 import SlideVerify from './components/lib/index';
 import store from './store/index'
+import pinyin from 'js-pinyin'
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
 
 Vue.use(ElementUI, {
     size: 'small'
 });
 Vue.use(SlideVerify)
-
 router.beforeEach((to, from, next) => {
     if(to.path === '/login') {
         next();
