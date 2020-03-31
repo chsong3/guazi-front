@@ -10,7 +10,7 @@ const requestPassport = axios.create({
 })
 
 const requestUser = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "http://localhost:8090",
     timeout: 20000 // 请求超时时间
 })
 
