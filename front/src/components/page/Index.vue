@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Myheader/>
         <el-row>
             <el-col>
                 <div class="index">
@@ -23,38 +22,31 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="daohuang">
-                                <h1>地区导航区</h1>
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col>
                             <!--热卖品牌-->
                             <div class="brand">
                                 <h1>热卖品牌</h1>
                                 <div class="block">
                                     <el-collapse v-model="activeName" accordion>
                                         <el-collapse-item title="大众 Volkswagen" name="1">
-                                            <div class="b_sign"></div>
+                                            <div class="b_sign_1"></div>
                                             <div class="fl_img" v-for="img in img2s" :key="img">
                                                 <el-image :src="img"></el-image>
                                             </div>
                                         </el-collapse-item>
-                                        <el-collapse-item title="宝马 BMW" name="2">
-                                            <div class="b_sign"></div>
+                                        <el-collapse-item title="别克 Buick" name="2">
+                                            <div class="b_sign_2"></div>
                                             <div class="fl_img" v-for="img in img2s" :key="img">
                                                 <el-image :src="img"></el-image>
                                             </div>
                                         </el-collapse-item>
-                                        <el-collapse-item title="日产 NISSAN" name="3">
-                                            <div class="b_sign"></div>
+                                        <el-collapse-item title="本田 Honda" name="3">
+                                            <div class="b_sign_3"></div>
                                             <div class="fl_img" v-for="img in img2s" :key="img">
                                                 <el-image :src="img"></el-image>
                                             </div>
                                         </el-collapse-item>
-                                        <el-collapse-item title="奥迪 Audi" name="4">
-                                            <div class="b_sign"></div>
+                                        <el-collapse-item title="福特 Ford" name="4">
+                                            <div class="b_sign_4"></div>
                                             <div class="fl_img" v-for="img in img2s" :key="img">
                                                 <el-image :src="img"></el-image>
                                             </div>
@@ -357,9 +349,40 @@
     /*热卖品牌区域*/
     .brand{
         margin: 0 auto;
-        margin-top: 200px;
         width: 70%;
         height: 750px;
+    }
+    .b_sign_4{
+        margin-top: 5px;
+        margin-left: 40px;
+        width: 50px;
+        height: 50px;
+        background-image: url("../../assets/index/fute.jpg");
+        background-size: 100% 100%;
+    }
+    .b_sign_3{
+        margin-top: 5px;
+        margin-left: 40px;
+        width: 70px;
+        height: 50px;
+        background-image: url("../../assets/index/bentian.jpg");
+        background-size: 100% 100%;
+    }
+    .b_sign_2{
+        margin-top: 5px;
+        margin-left: 40px;
+        width: 100px;
+        height: 50px;
+        background-image: url("../../assets/index/bike.jpg");
+        background-size: 100% 100%;
+    }
+    .b_sign_1{
+        margin-top: 5px;
+        margin-left: 40px;
+        width: 50px;
+        height: 50px;
+        background-image: url("../../assets/index/volkswagen.jpg");
+        background-size: 100% 100%;
     }
     /*热卖车型区域*/
     .Vehicle_type{
@@ -383,30 +406,12 @@
         margin-top: 60px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     }
-    .b_sign{
-        margin-top: 5px;
-        margin-left: 40px;
-        width: 50px;
-        height: 50px;
-        border: blueviolet solid 2px;
-    }
     .fl_img{
         margin-left: 40px;
         margin-top: 20px;
         float: left;
         width: 20%;
         height: 250px;
-        border: blueviolet solid 2px;
-    }
-
-    /*导航区域*/
-    .daohuang{
-        position: absolute;
-        margin-left: 280px;
-        margin-top: -100px;
-        width: 70%;
-        height: 300px;
-        background: brown;
         border: blueviolet solid 2px;
     }
 
