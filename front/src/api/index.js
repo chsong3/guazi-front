@@ -130,6 +130,14 @@ export default {
             method:'post',
             data:guCarInfo
         })
+    },
+    //预约车辆
+    orderCar(carInfo){
+        return requestCarInfo({
+            url:'orderCar',
+            method:'post',
+            data:carInfo
+        })
     }
 
 }
