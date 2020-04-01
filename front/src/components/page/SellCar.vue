@@ -22,27 +22,49 @@
                                         <el-button type="success" style="margin-left: 100px;float: left;" @click="sell_if_car">高价卖车</el-button>
                                     </div>
 
-                                    <div class="form_gu">
-                                        <el-dialog title="高价卖车" :visible.sync="dialogSellVisible" width="500px" >
-                                            <el-form :model="sellcar_form">
+                                    <div class="form_mai">
+                                        <el-dialog title="高价卖车" :visible.sync="dialogSell_1Visible" width="500px" >
+                                            <el-form :model="car_info">
                                                 <el-form-item label="车源地" label-width="80px">
-                                                    <el-input class="" v-model="sellcar_form.name" autocomplete="off"></el-input>
+                                                    <el-input class="" v-model="car_info.yuandi" autocomplete="off"></el-input>
                                                 </el-form-item>
                                                 <el-form-item label="品牌" label-width="80px">
-                                                    <el-input v-model="sellcar_form.name" autocomplete="off"></el-input>
+                                                    <el-input v-model="car_info.pingpai" autocomplete="off"></el-input>
                                                 </el-form-item>
                                                 <el-form-item label="型号" label-width="80px">
-                                                    <el-input v-model="sellcar_form.name" autocomplete="off"></el-input>
-                                                </el-form-item>
-                                                <el-form-item label="提车时间" label-width="80px">
-                                                    <el-date-picker type="date" placeholder="选择日期" v-model="sellcar_form.date" style="width: 100%;"></el-date-picker>
+                                                    <el-input v-model="car_info.xinghao" autocomplete="off"></el-input>
                                                 </el-form-item>
                                                 <el-form-item label="行程公里" label-width="80px">
-                                                    <el-input v-model="sellcar_form.name" autocomplete="off" placeholder="万公里"></el-input>
+                                                    <el-input v-model="car_info.lucheng" autocomplete="off" placeholder="万公里"></el-input>
+                                                </el-form-item>
+                                                <el-form-item label="卖家姓名" label-width="80px">
+                                                    <el-input v-model="car_info.manname" autocomplete="off" ></el-input>
+                                                </el-form-item>
+                                                <el-form-item label="卖家电话" label-width="80px">
+                                                    <el-input v-model="car_info.manphone" autocomplete="off" :placeholder=phone_form.number :disabled="true"></el-input>
                                                 </el-form-item>
                                             </el-form>
                                             <div slot="footer" class="dialog-footer">
-                                                <el-button type="primary" @click="dialogSellVisible = false">确定</el-button>
+                                                <el-button type="primary" @click="dialogSell_1Visible=false;dialogSell_2Visible=true">下一步</el-button>
+                                            </div>
+                                        </el-dialog>
+                                        <el-dialog title="高价卖车" :visible.sync="dialogSell_2Visible" width="500px" >
+                                            <el-form :model="car_info" >
+                                                <el-form-item label="验车时间" label-width="80px">
+                                                    <el-radio-group v-model="car_info.time" size="small">
+                                                        <el-radio label="明天上午9-12点"></el-radio>
+                                                        <el-radio label="明天下午5-6点"></el-radio>
+                                                        <el-radio label="后天上午9-12点"></el-radio>
+                                                        <el-radio label="后天下午5-6点"></el-radio>
+                                                        <el-radio label="以上时间都不行，请联系我"></el-radio>
+                                                    </el-radio-group>
+                                                </el-form-item>
+                                                <el-form-item label="验车地址" label-width="80px">
+                                                    <el-input v-model="car_info.address" autocomplete="off" placeholder="请输入详细信息"></el-input>
+                                                </el-form-item>
+                                            </el-form>
+                                            <div slot="footer" class="dialog-footer">
+                                                <el-button type="primary" @click="insertPhone">提交</el-button>
                                             </div>
                                         </el-dialog>
                                     </div>
@@ -55,23 +77,36 @@
                                         <el-dialog title="快速估车" :visible.sync="dialogFormVisible" width="500px" >
                                             <el-form :model="estimate_form">
                                                 <el-form-item label="车源地" label-width="80px">
-                                                    <el-input class="" v-model="estimate_form.name" autocomplete="off"></el-input>
+                                                    <el-input class="" v-model="estimate_form.yuandi" autocomplete="off"></el-input>
                                                 </el-form-item>
                                                 <el-form-item label="品牌" label-width="80px">
-                                                    <el-input v-model="estimate_form.name" autocomplete="off"></el-input>
+                                                    <el-input v-model="estimate_form.pingpai" autocomplete="off"></el-input>
                                                 </el-form-item>
                                                 <el-form-item label="型号" label-width="80px">
-                                                    <el-input v-model="estimate_form.name" autocomplete="off"></el-input>
-                                                </el-form-item>
-                                                <el-form-item label="提车时间" label-width="80px">
-                                                    <el-date-picker type="date" placeholder="选择日期" v-model="estimate_form.date" style="width: 100%;"></el-date-picker>
+                                                    <el-input v-model="estimate_form.xinghao" autocomplete="off"></el-input>
                                                 </el-form-item>
                                                 <el-form-item label="行程公里" label-width="80px">
-                                                    <el-input v-model="estimate_form.name" autocomplete="off" placeholder="万公里"></el-input>
+                                                    <el-input v-model="estimate_form.gongli" autocomplete="off" placeholder="万公里"></el-input>
+                                                </el-form-item>
+                                                <el-form-item label="是否经过大修" label-width="100px">
+                                                    <el-switch v-model="estimate_form.delivery"></el-switch>
                                                 </el-form-item>
                                             </el-form>
                                             <div slot="footer" class="dialog-footer">
-                                                <el-button type="primary" @click="dialogFormVisible = false">开始估价</el-button>
+                                                <el-button type="primary" @click="estimate_car">开始估价</el-button>
+                                            </div>
+                                        </el-dialog>
+                                        <el-dialog title="快速估车" :visible.sync="dialogForm_2Visible" width="500px" >
+                                            <div>
+                                                <span style="font-size: 20px">车源地：{{estimate_form.yuandi}}， 品牌：{{estimate_form.pingpai}}， 型号: {{estimate_form.xinghao}}</span>
+                                                <el-divider content-position="left"><i class="el-icon-bicycle"/>车辆基本信息<i class="el-icon-guide"/></el-divider>
+                                                <span style="font-size: 20px">公里数：{{estimate_form.gongli}}万公里, 大致车况：{{car_information}}</span>
+                                                <el-divider><i class="el-icon-loading"/>基础损耗项</el-divider>
+                                                <span style="font-size: 20px">估价区间：{{gu_price.high}}万元<i class="el-icon-caret-right"/><i class="el-icon-caret-right"/><i class="el-icon-caret-right"/>{{gu_price.low}}万元</span>
+                                                <el-divider content-position="right"><i class="el-icon-thumb"/>估价范围</el-divider>
+                                            </div>
+                                            <div slot="footer" class="dialog-footer">
+                                                <el-button type="primary" @click="dialogForm_2Visible=false">确定</el-button>
                                             </div>
                                         </el-dialog>
                                     </div>
@@ -148,17 +183,17 @@
                                     <ul class="c_img">
                                         <img id="img_2" style="width: 300px;height: 210px;">
                                         <div style="width: 300px;height: 90px;">
-                                            <li style="list-style: none;margin-top: 5px">宝马X1 2013款 sDrive18i 时尚型</li>
+                                            <li style="list-style: none;margin-top: 5px">海马S5 2015款 1.5T CVT旗舰款</li>
                                             <li style="margin-top: 20px;float: left;list-style: none;">成交价：</li>
-                                            <h2 style="margin-top: 15px;color: red">10.6万</h2>
+                                            <h2 style="margin-top: 15px;color: red">5.40万</h2>
                                         </div>
                                     </ul>
                                     <ul class="c_img">
                                         <img id="img_3" style="width: 300px;height: 210px;">
                                         <div style="width: 300px;height: 90px;">
-                                            <li style="list-style: none;margin-top: 5px">宝马X1 2013款 sDrive18i 时尚型</li>
+                                            <li style="list-style: none;margin-top: 5px">标致301 2014款 1.6L 手动舒适版</li>
                                             <li style="margin-top: 20px;float: left;list-style: none;">成交价：</li>
-                                            <h2 style="margin-top: 15px;color: red">10.6万</h2>
+                                            <h2 style="margin-top: 15px;color: red">3.72万</h2>
                                         </div>
                                     </ul>
                                 </el-carousel-item>
@@ -166,25 +201,25 @@
                                     <ul class="c_img">
                                         <img id="img_4" style="width: 300px;height: 210px;">
                                         <div style="width: 300px;height: 90px;">
-                                            <li style="list-style: none;margin-top: 5px">宝马X1 2013款 sDrive18i 时尚型</li>
+                                            <li style="list-style: none;margin-top: 5px">别克 威朗 2018款 三厢 15S 自动挡/li>
                                             <li style="margin-top: 20px;float: left;list-style: none;">成交价：</li>
-                                            <h2 style="margin-top: 15px;color: red">10.6万</h2>
+                                            <h2 style="margin-top: 15px;color: red">8.83万</h2>
                                         </div>
                                     </ul>
                                     <ul class="c_img">
                                         <img id="img_5" style="width: 300px;height: 210px;">
                                         <div style="width: 300px;height: 90px;">
-                                            <li style="list-style: none;margin-top: 5px">宝马X1 2013款 sDrive18i 时尚型</li>
+                                            <li style="list-style: none;margin-top: 5px">长安CS35 2016款 1.6L 手动豪华型</li>
                                             <li style="margin-top: 20px;float: left;list-style: none;">成交价：</li>
-                                            <h2 style="margin-top: 15px;color: red">10.6万</h2>
+                                            <h2 style="margin-top: 15px;color: red">4.18万</h2>
                                         </div>
                                     </ul>
                                     <ul class="c_img">
                                         <img id="img_6" style="width: 300px;height: 210px;">
                                         <div style="width: 300px;height: 90px;">
-                                            <li style="list-style: none;margin-top: 5px">宝马X1 2013款 sDrive18i 时尚型</li>
+                                            <li style="list-style: none;margin-top: 5px">路虎 发现神行 2017款 2.0T SE</li>
                                             <li style="margin-top: 20px;float: left;list-style: none;">成交价：</li>
-                                            <h2 style="margin-top: 15px;color: red">10.6万</h2>
+                                            <h2 style="margin-top: 15px;color: red">23.00万</h2>
                                         </div>
                                     </ul>
                                 </el-carousel-item>
@@ -250,37 +285,80 @@
 <script>
     import Myheader from '../common/Header.vue';
     import Myfooter from '../common/Footer.vue';
+    import request from '../../api/index';
 export default {
     name: "SellCar",
     components: {Myheader, Myfooter},
 
     data() {
         return {
-            phone_form:{
-                number:'',
+            phone_form: {
+                number: '',
             },
             estimate_form: {
                 name: '',
-                date:'',
+                yuandi:'',
+                pingpai:'',
+                xinghao:'',
+                gongli:'',
+                delivery: false,
             },
-            sellcar_form:{
-                name: '',
-                date:'',
+            car_info: {
+                yuandi: '',
+                pingpai: '',
+                xinghao: '',
+                lucheng: '',
+                manname: '',
+                manphone:'',
+                time:'',
+                address:'',
+            },
+            gu_price: {
+                high:'',
+                low:'',
             },
             dialogFormVisible: false,
-            dialogSellVisible: false,
+            dialogForm_2Visible: false,
+            dialogSell_1Visible: false,
+            dialogSell_2Visible: false,
+            car_information:'',
         }
     },
     methods: {
-        sell_if_car(){
-            if(this.phone_form.number) {
-                this.dialogSellVisible=true
-            }else {
+        sell_if_car() {
+            if (this.phone_form.number) {
+                this.dialogSell_1Visible = true
+            } else {
                 this.$message('请填写电话');
             }
+
+        },
+        insertPhone(){
+            this.car_info.manphone=this.phone_form.number;
+            request.insertSellCarInfo(this.car_info).then(response =>{
+
+            });
+            this.dialogSell_2Visible=false
+            this.$message('提交成功');
+        },
+        estimate_car(){
+            if (this.estimate_form.delivery){
+                this.car_information='车辆有过大型故障'
+            } else {
+                this.car_information='车况正常'
+            }
+            request.getGuCarInfo(this.estimate_form).then(response =>{
+                console.log(response)
+               this.gu_price.high = response.data.high.toFixed(2)
+                this.gu_price.low = response.data.low.toFixed(2);
+            });
+
+            this.dialogFormVisible = false;
+            this.dialogForm_2Visible=true
         }
-        }
+
     }
+}
 </script>
 
 
@@ -329,6 +407,18 @@ export default {
         font-size: 130px;
         color: green;
     }
+    .el-icon-guide{
+        font-size: 30px;
+    }
+    .el-icon-bicycle{
+        font-size: 30px;
+    }
+    .el-icon-loading{
+        font-size: 30px;
+    }
+    .el-icon-thumb{
+        font-size: 30px;
+    }
     .process_1{
         margin-left: 130px;
         list-style: none;
@@ -351,23 +441,23 @@ export default {
         background-size: 100% 100%;
     }
     #img_2{
-        background-image: url("../../assets/sellcar/sc_img1.png");
+        background-image: url("../../assets/sellcar/sc_img2.png");
         background-size: 100% 100%;
     }
     #img_3{
-        background-image: url("../../assets/sellcar/sc_img1.png");
+        background-image: url("../../assets/sellcar/sc_img3.png");
         background-size: 100% 100%;
     }
     #img_4{
-        background-image: url("../../assets/sellcar/sc_img1.png");
+        background-image: url("../../assets/sellcar/sc_img4.png");
         background-size: 100% 100%;
     }
     #img_5{
-        background-image: url("../../assets/sellcar/sc_img1.png");
+        background-image: url("../../assets/sellcar/sc_img5.png");
         background-size: 100% 100%;
     }
     #img_6{
-        background-image: url("../../assets/sellcar/sc_img1.png");
+        background-image: url("../../assets/sellcar/sc_img6.png");
         background-size: 100% 100%;
     }
     #img_7{

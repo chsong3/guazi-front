@@ -55,10 +55,10 @@ export default new Router({
             path: '*',
             redirect: '/404'
         },
-        {
-            path: '/test',
-            component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
-            meta: { title: '空白页面' }
-        }
+        // {
+        //     path: '/test',
+        //     component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
+        //     meta: { title: '空白页面' }
+        // }
     ]
 });

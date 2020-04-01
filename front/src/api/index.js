@@ -112,7 +112,26 @@ export default {
             url:'queryCarImg?carId='+carId,
             method:'post'
         })
+    },
+
+    //增加卖车
+    insertSellCarInfo(carInfoForm){
+        return requestCarInfo({
+            url:'addSellCollectCar',
+            method:'post',
+            data: carInfoForm
+        })
+    },
+
+    //估车查询
+    getGuCarInfo(guCarInfo){
+        return requestCarInfo({
+            url:'guCarInfo',
+            method:'post',
+            data:guCarInfo
+        })
     }
+
 }
 Date.prototype.format = function (fmt) { //author: meizz
     let o = {
