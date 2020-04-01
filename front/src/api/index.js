@@ -113,14 +113,25 @@ export default {
             method:'post'
         })
     },
-    //预约车辆
-    orderCar(carInfo){
+
+    //增加卖车
+    insertSellCarInfo(carInfoForm){
         return requestCarInfo({
-            url:'orderCar',
+            url:'addSellCollectCar',
             method:'post',
-            data:carInfo
+            data: carInfoForm
+        })
+    },
+
+    //估车查询
+    getGuCarInfo(guCarInfo){
+        return requestCarInfo({
+            url:'guCarInfo',
+            method:'post',
+            data:guCarInfo
         })
     }
+
 }
 Date.prototype.format = function (fmt) { //author: meizz
     let o = {
