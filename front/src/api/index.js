@@ -112,6 +112,14 @@ export default {
             url:'queryCarImg?carId='+carId,
             method:'post'
         })
+    },
+    //预约车辆
+    orderCar(carInfo){
+        return requestCarInfo({
+            url:'orderCar',
+            method:'post',
+            data:carInfo
+        })
     }
 }
 Date.prototype.format = function (fmt) { //author: meizz
