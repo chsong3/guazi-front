@@ -5,89 +5,6 @@
                 <div class="index">
                     <el-row>
                         <el-col>
-                            <div class="search">
-                                <div class="sinput">
-                                    <div class="inputcontent">
-                                        <el-input
-                                            v-model="input"
-                                            placeholder="请输入关键字：如2.4L 宝马">
-                                        </el-input>
-                                    </div>
-                                    <div class="inputbutton">
-                                        <el-button type="primary" icon="el-icon-search">搜索</el-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col>
-                            <!--热卖品牌-->
-                            <div class="brand">
-                                <h1>热卖品牌</h1>
-                                <div class="block">
-                                    <el-collapse v-model="activeName" accordion>
-                                        <el-collapse-item title="大众 Volkswagen" name="1">
-                                            <div class="b_sign_1"></div>
-                                            <div class="fl_img" v-for="img in img2s" :key="img">
-                                                <el-image :src="img"></el-image>
-                                            </div>
-                                        </el-collapse-item>
-                                        <el-collapse-item title="别克 Buick" name="2">
-                                            <div class="b_sign_2"></div>
-                                            <div class="fl_img" v-for="img in img2s" :key="img">
-                                                <el-image :src="img"></el-image>
-                                            </div>
-                                        </el-collapse-item>
-                                        <el-collapse-item title="本田 Honda" name="3">
-                                            <div class="b_sign_3"></div>
-                                            <div class="fl_img" v-for="img in img2s" :key="img">
-                                                <el-image :src="img"></el-image>
-                                            </div>
-                                        </el-collapse-item>
-                                        <el-collapse-item title="福特 Ford" name="4">
-                                            <div class="b_sign_4"></div>
-                                            <div class="fl_img" v-for="img in img2s" :key="img">
-                                                <el-image :src="img"></el-image>
-                                            </div>
-                                        </el-collapse-item>
-                                    </el-collapse>
-                                </div>
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <el-row style="background: darkgray">
-                        <el-col>
-                            <!--热卖车型-->
-                            <div class="Vehicle_type">
-                                <h1>热卖车型</h1>
-                                <el-tabs v-model="Vehicle_type_name" @tab-click="handleClick">
-                                    <el-tab-pane label="降价车" name="first">
-                                        <div class="A" v-for="img in imgs" :key="img">
-                                            <el-image :src="img"></el-image>
-                                        </div>
-                                    </el-tab-pane>
-                                    <el-tab-pane label="SUV" name="second">
-                                        <div class="A" v-for="img in imgs" :key="img">
-                                            <el-image :src="img"></el-image>
-                                        </div>
-                                    </el-tab-pane>
-                                    <el-tab-pane label="最新上架" name="third">
-                                        <div class="A" v-for="img in imgs" :key="img">
-                                            <el-image :src="img"></el-image>
-                                        </div>
-                                    </el-tab-pane>
-                                    <el-tab-pane label="练手车" name="fourth">
-                                        <div class="A" v-for="img in imgs" :key="img">
-                                            <el-image :src="img"></el-image>
-                                        </div>
-                                    </el-tab-pane>
-                                </el-tabs>
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col>
                             <!--流程介绍-->
                             <div class="introduce">
                                 <el-row>
@@ -176,7 +93,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div style="width: 300px;height: 440px;background: white;float: left;opacity:0.5"></div>
-                                                                            </el-carousel-item>2
+                                                                            </el-carousel-item>
                                                                         </el-carousel>
                                                                     </div>
                                                                 </el-col>
@@ -195,10 +112,10 @@
                                                                             </el-steps>
                                                                         </div>
                                                                         <div class="sell_search">
-                                                                            <el-link class="link_2" icon="el-icon-phone-outline" :underline="false" @click="changesell_con(0);setActiveItem_3('buy_1')">预约看车</el-link>
-                                                                            <el-link class="link_2" icon="el-icon-s-custom" :underline="false" @click="changesell_con(1);setActiveItem_3('buy_2')">专人带看</el-link>
-                                                                            <el-link class="link_2" icon="el-icon-notebook-1" :underline="false" @click="changesell_con(2);setActiveItem_3('buy_3')">签署合同</el-link>
-                                                                            <el-link class="link_2" icon="el-icon-edit-outline" :underline="false" @click="changesell_con(3);setActiveItem_3('buy_4')">交易过户</el-link>
+                                                                            <el-link class="link_2" icon="el-icon-phone-outline" :underline="false" @click="changesell_con(0);setActiveItem_3('buy_1')">在线预约</el-link>
+                                                                            <el-link class="link_2" icon="el-icon-s-custom" :underline="false" @click="changesell_con(1);setActiveItem_3('buy_2')">全网代售</el-link>
+                                                                            <el-link class="link_2" icon="el-icon-notebook-1" :underline="false" @click="changesell_con(2);setActiveItem_3('buy_3')">用户看车</el-link>
+                                                                            <el-link class="link_2" icon="el-icon-edit-outline" :underline="false" @click="changesell_con(3);setActiveItem_3('buy_4')">签约过户</el-link>
                                                                         </div>
                                                                     </div>
                                                                 </el-col>
@@ -217,6 +134,7 @@
                                                                                         <li>到店免费检测服务</li>
                                                                                     </div>
                                                                                 </div>
+                                                                                <div style="width: 300px;height: 440px;background: white;float: left;opacity:0.5"></div>
                                                                             </el-carousel-item>
                                                                             <el-carousel-item name="buy_2">
                                                                                 <div class="sell_2_img"></div>
@@ -226,6 +144,7 @@
                                                                                         <li>海量卖家快速售出</li>
                                                                                     </div>
                                                                                 </div>
+                                                                                <div style="width: 300px;height: 440px;background: white;float: left;opacity:0.5"></div>
                                                                             </el-carousel-item>
                                                                             <el-carousel-item name="buy_3">
                                                                                 <div class="sell_3_img"></div>
@@ -235,6 +154,7 @@
                                                                                         <li>快速匹配意向买家</li>
                                                                                     </div>
                                                                                 </div>
+                                                                                <div style="width: 300px;height: 440px;background: white;float: left;opacity:0.5"></div>
                                                                             </el-carousel-item>
                                                                             <el-carousel-item name="buy_4">
                                                                                 <div class="sell_4_img"></div>
@@ -244,7 +164,8 @@
                                                                                         <li>省心省时，全程陪同</li>
                                                                                     </div>
                                                                                 </div>
-                                                                            </el-carousel-item>2
+                                                                                <div style="width: 300px;height: 440px;background: white;float: left;opacity:0.5"></div>
+                                                                            </el-carousel-item>
                                                                         </el-carousel>
                                                                     </div>
                                                                 </el-col>
@@ -299,12 +220,13 @@
             url:'D:\\study\\idea\\idea_worker\\guazi-front\\front\\src\\assets\\1.png',
             input:'',
             activeName:'1',
-            sell_con:1,
+            sell_con:0,
             s_image_1:'http://sta.guazistatic.com/static/c2c/web/index/buy-step-order.jpg'
         }
     },
         methods: {
             setActiveItem(item){
+                this.sell_con=0;
                 this.$refs.carousel.setActiveItem(item);
             },
             setActiveItem_2(item){
@@ -544,7 +466,34 @@
         background-image: url(../../assets/index/deal.jpg);
         background-size: 100% 100%;
     }
-    .sell_1_img{}
+    .sell_1_img{
+        position:absolute;
+        width: 1750px;
+        height: 440px;
+        background-image: url(../../assets/index/sell_yy.png);
+        background-size: 100% 100%;
+    }
+    .sell_2_img{
+        position:absolute;
+        width: 1750px;
+        height: 440px;
+        background-image: url(../../assets/index/sell_qw.png);
+        background-size: 100% 100%;
+    }
+    .sell_3_img{
+        position:absolute;
+        width: 1750px;
+        height: 440px;
+        background-image: url(../../assets/index/sell_dai.png);
+        background-size: 100% 100%;
+    }
+    .sell_4_img{
+        position:absolute;
+        width: 1750px;
+        height: 440px;
+        background-image: url(../../assets/index/sell_deal.png);
+        background-size: 100% 100%;
+    }
 
 
 
