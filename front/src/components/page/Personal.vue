@@ -120,6 +120,12 @@
         },
         mounted() {
             this.user = this.$cookies.get('user');
+            let routeParam=this.$route.query.name;
+            if (routeParam == 'collect'){
+                this.catCollect();
+            }else if (routeParam == 'record'){
+                this.catRecord();
+            }
         },
         methods: {
             // 分页导航
@@ -144,12 +150,14 @@
                     carRecord: true
                 }
                 let record = this.$cookies.get('carRecord');
+                console.log(record)
                 this.getCarInfoListByIds(record);
             },
             //根据多个id查询
             getCarInfoListByIds(record) {
                 request.getCarInfoListByIds(record).then(response => {
                     this.carList = response.data.map;
+                    console.log(this.carList)
                 });
             }
         }

@@ -48,17 +48,13 @@ export default new Router({
             ]
         },
         {
-            path: '/sellCar',
-            component: () => import(/* webpackChunkName: "index" */ '../components/page/SellCar.vue')
-        },
-        {
             path: '*',
             redirect: '/404'
         },
-        // {
-        //     path: '/test',
-        //     component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
-        //     meta: { title: '空白页面' }
-        // }
+        {
+            path: '/test',
+            component: () => import(/* webpackChunkName: "index" */ '../components/page/test.vue'),
+            meta: { title: '空白页面' }
+        }
     ]
 });

@@ -4,7 +4,7 @@
             <el-main>
                 <!--条件筛选部分-->
                 <!--搜索框-->
-                <el-row>0
+                <el-row>
                     <el-col :span="16">
                         <div>
                             <span>瓜子二手车>重庆二手车</span>
@@ -482,6 +482,7 @@
                     </el-row>
                 </el-row>
                 <el-divider></el-divider>
+                <!--                列表部分-->
                 <el-row class="cardList">
                     <el-col v-show="carList.length==0">
                         抱歉，没有找到您的爱车，请换个条件试试吧！
@@ -505,7 +506,8 @@
                                                 <span>万</span>
                                             </p>
                                             <em style="color: red;" v-if="car.otherDeploy=='1'">首付{{(car.price*0.3).toFixed(2)}}万</em>
-                                            <em v-else="car.otherDeploy!='1'" class="line-through">{{car.price+1.2}}万</em>
+                                            <em v-else="car.otherDeploy!='1'"
+                                                class="line-through">{{car.price+1.2}}万</em>
                                         </div>
                                     </div>
                                 </div>
@@ -545,7 +547,7 @@
     export default {
         data() {
             return {
-                cityId:this.$store.state.cityId,
+                cityId: this.$store.state.cityId,
                 searchInput: '',
                 FristPin: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z'],
                 brandJson: [],
@@ -609,7 +611,7 @@
                     id: '', //编号
                     brandId: '',//品牌
                     seriesId: '',//系列
-                    seriesName:'',
+                    seriesName: '',
                     userId: '',//车的所属人
                     price: '',//价格
                     beginPrice: '',//价格范围
@@ -679,9 +681,9 @@
                 deep: true,
                 immediate: true
             },
-            cityId:{
-                handler(newName,oldName){
-                    this.carFrom.area=newName
+            cityId: {
+                handler(newName, oldName) {
+                    this.carFrom.area = newName;
                 }
             }
         },
@@ -700,20 +702,30 @@
             this.loadData();
             switch (this.$route.query.id) {
                 case 1:
-                    this.clickPrice(1,1)
+                    this.clickPrice(1, 1);
                     break;
                 case 2:
-                    this.clickPrice(2,2)
+                    this.clickPrice(2, 2);
                     break;
                 case 3:
-                    this.clickPrice(3,3)
+                    this.clickPrice(3, 3);
                     break;
                 case 4:
-                    this.clickPrice(3,3)
+                    this.clickPrice(3, 3);
                     break;
             }
+            this.index4search()
         },
         methods: {
+            index4search() {
+                if (this.$route.query.name == 'search') {
+                    let str = this.$route.query.value;
+                    this.carFrom.seriesName = str;
+                    this.tagArr[1].name = str;//保存标签
+                }
+                // this.carFrom.seriesName = this.$route.query.value;
+
+            },
             loadData() {
                 this.getBrandList();
                 this.getSeriesList('');
@@ -723,7 +735,9 @@
                 quest.getCarInfoList(carForm).then(response => {
                     this.carList = [];
                     this.carList = response.data.map;
-                });
+                }).catch(e=>{
+                    this.carList = [];
+                })
             },
             getCarInfoBySort(name) {
                 if (name == 'default') {
@@ -877,7 +891,7 @@
             },
             createStateFilter(queryString) {
                 return this.carList.filter((value) => {
-                    return value.seriesName.indexOf(queryString)===0;
+                    return value.seriesName.indexOf(queryString) === 0;
                 });
             },
             searchSelect(item) {
@@ -888,10 +902,11 @@
                 this.getCarInfo(this.carFrom);
             },
             //清空输入框触发
-            searchClear(){
-               this.$router.go(0)
+            searchClear() {
+                this.$router.go(0);
             },
             clickBrand(id) {
+                this.carFrom.seriesName = ''
                 this.carFrom.seriesId = '';//清空条件
                 this.showClass.seriesActiveIndex = 999;//车系回到不限
                 this.showClass.activeIndex = id;
@@ -907,6 +922,7 @@
                         return value.id == id;
                     });
                     this.tagArr[0].name = arr[0].name;//保存标签
+                    this.tagArr[1].name = '';//重置标签
                     this.showClass.activeIndex = id;
                     this.getSeriesList(id);
                     this.carFrom.brandId = id;
@@ -914,6 +930,7 @@
                 }
             },
             clickSeries(id) {
+                this.carFrom.seriesName = ''
                 this.carFrom.seriesId = id;
                 //this.getCarInfo(this.carFrom);
                 if (id == 999) {//不限
@@ -928,6 +945,7 @@
                 }
             },
             clickPrice(index, id) {
+                this.carFrom.seriesName = ''
                 this.showClass.priceActiveIndex.forEach((item, index, arr) => {
                     item.active = false;
                 });
@@ -945,6 +963,7 @@
 
             },
             confirmPrice() {
+                this.carFrom.seriesName = ''
                 if (this.carFrom.beginPrice != '' && this.carFrom.endPrice != '') {
                     this.carFrom.price = '';
                     let priceArr = this.showClass.priceActiveIndex;
@@ -1017,8 +1036,8 @@
                     selectCar: false
                 };
                 this.carList = this.carList.filter((value) => {
-                    return value.otherDeploy == '1'
-                })
+                    return value.otherDeploy == '1';
+                });
             },
             //严选车
             clickSelect() {
@@ -1029,26 +1048,26 @@
                 };
             },
             //浏览记录
-            clickOneCar(car){
-                let record = this.$cookies.get("carRecord");
-                if(record != null){
+            clickOneCar(car) {
+                let record = this.$cookies.get('carRecord');
+                if (record != null) {
                     var records = record.split('-');
-                    let id=records.filter(value => {
-                        return value == car.id
-                    })
-                    if (id.length == 0){
-                        record = record+'-'+car.id
-                        this.$cookies.remove("carRecord")
-                        this.$cookies.set("carRecord",record,-1)
+                    let id = records.filter(value => {
+                        return value == car.id;
+                    });
+                    if (id.length == 0) {
+                        record = record + '-' + car.id;
+                        this.$cookies.remove('carRecord');
+                        this.$cookies.set('carRecord', record, -1);
                     }
-                }else {
-                    this.$cookies.set("carRecord",car.id,-1)
+                } else {
+                    this.$cookies.set('carRecord', car.id, -1);
                 }
                 let routeUrl = this.$router.resolve({
-                    path: "/carDetail",
-                    query:car
+                    path: '/carDetail',
+                    query: car
                 });
-                window.open(routeUrl .href, '_blank');
+                window.open(routeUrl.href, '_blank');
             }
         }
     };
@@ -1060,26 +1079,31 @@
         list-style: none;
         text-align: -webkit-match-parent;
     }
+
     .gray-font {
         font-family: "Apple Color Emoji";
         color: #777777;
         font-size: 16px;
     }
+
     .condition {
         height: 100%;
         margin-top: 20px;
         border: 1px #DCDFE6 solid;
         border-bottom: white;
     }
+
     .condition-item {
         width: 100%;
         height: 100%;
         border-bottom: 1px #DCDFE6 solid;
     }
+
     .item-head {
         height: 49px;
         background-color: #FAFAFA;
     }
+
     .item-head-font {
         display: block;
         text-align: center;

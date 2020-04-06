@@ -38,9 +38,9 @@
                 </div>
                 <div class="uc-app" v-show="showdropdown" @mouseover="showdropdown=true" @mouseout="showdropdown=false">
                     <div class="dropmenu" @click="toPersonal">个人中心</div>
-                    <div class="dropmenu">收藏车辆</div>
+                    <div class="dropmenu" @click="toPersonal">收藏车辆</div>
+                    <div class="dropmenu" @click="toRecord">浏览记录</div>
                     <div class="dropmenu">降价提醒</div>
-                    <div class="dropmenu">浏览记录</div>
                     <div class="dropmenu" @click="loginOut">退出</div>
                 </div>
             </div>
@@ -135,6 +135,9 @@
             };
         },
         mounted() {
+            if (this.$route.path!='/carDetail'){
+                this.$router.push('/index')
+            }
             let user = this.$cookies.get("user")
             user != null ? this.user = user : this.user == this.user
             this.getCityList();
@@ -189,8 +192,13 @@
                 this.loginDialogVisible = true;
             },
             loginOut() {
+                if (this.$route.path == '/personal'){
+                    this.$router.push('/index')
+                    this.$router.go(0)
+                }else {
+                    this.$router.go(0)
+                }
                 this.$cookies.remove("user")
-                this.$router.go(0)
             },
             clickIndex() {
                 this.$router.push('/index');
@@ -205,7 +213,20 @@
                 this.$router.push('/finance');
             },
             toPersonal(){
-                this.$router.push('/personal');
+                this.$router.push({
+                    path:'/personal',
+                    query:{
+                        name:'collect'
+                    }
+                });
+            },
+            toRecord(){
+                this.$router.push({
+                    path:'/personal',
+                    query:{
+                        name:'record'
+                    }
+                });
             },
             /******/
             /*登录*/
@@ -222,7 +243,7 @@
                         const time = setInterval(() => {
                             this.msgTime--;
                             this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime);
-                            if (this.msgTime == 0) {
+                            if (this.msgTime == 0) {//时间到了
                                 this.msgTime = MSGTIME;
                                 this.msgText = MSGINIT;
                                 this.msgKey = false;
